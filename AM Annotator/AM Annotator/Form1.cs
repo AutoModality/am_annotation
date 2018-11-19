@@ -22,6 +22,11 @@ namespace AM_Annotator
         private List<string> supported_img_format = new List<string>{ "jpg", "jpeg", "png", "gif", "tiff", "bmp" };
         private List<string> current_directory_img_list = new List<string>();
         private string last_openned_directory = @"C:\";
+        private string output_directory = @"C:\";
+        private Point mouse_start_position = new Point();
+        private Point mouse_current_position = new Point();
+
+        bool mouseIsDown = false;
 
         Mat selected_img = new Mat();
         public mainWindow()
@@ -106,7 +111,10 @@ namespace AM_Annotator
                 }
 
                 updateImgListBox();
-                imageLB.SelectedIndex = 0;
+                if (imageLB.Items.Count > 0)
+                {
+                    imageLB.SelectedIndex = 0;
+                }
             }
             catch (NullReferenceException nre)
             {
@@ -166,6 +174,127 @@ namespace AM_Annotator
             {
 
             }
+        }
+
+        /***********************************Output Directory Set Button********************************************/
+        private void setBTN_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog openDir = new FolderBrowserDialog();
+
+            if (openDir.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(openDir.SelectedPath))
+            {
+                output_directory = openDir.SelectedPath;
+                outputDirectoryTB.Text = openDir.SelectedPath;
+            }
+        }
+
+        private void mainPB_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (mainPB.Image == null)
+            {
+                return;
+            }
+            if (e.X > mainPB.Image.Width || e.Y > mainPB.Image.Height)
+            {
+                return;
+            }
+            mouse_start_position.X = e.X;
+            mouse_start_position.Y = e.Y;
+            mouseIsDown = true;
+            mainPB.Invalidate();
+
+            /*Updating the Label Info about the annotation*/
+            lastAnnotationXL.Text = mouse_start_position.X.ToString();
+            lastAnnotationYL.Text = mouse_start_position.Y.ToString();
+        }
+
+        private void mainPB_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (mouseIsDown)
+            {
+                mouse_current_position.X = e.X;
+                mouse_current_position.Y = e.Y;
+                mainPB.Invalidate();
+            }
+
+            cursorPositionXL.Text = e.X.ToString();
+            cursorPositionYL.Text = e.Y.ToString();
+
+
+            try
+            {
+                /*Make sure that the draw is within the width and height of the image*/
+                mouse_current_position.X = Math.Min(mouse_current_position.X, mainPB.Image.Width);
+                mouse_current_position.Y = Math.Min(mouse_current_position.Y, mainPB.Image.Height);
+
+                mouse_current_position.X = Math.Max(mouse_current_position.X, 0);
+                mouse_current_position.Y = Math.Max(mouse_current_position.Y, 0);
+
+                /*Updating the Label Info about the annotation*/
+                lastAnnotationEndXL.Text = mouse_current_position.X.ToString();
+                lastAnnotationEndYL.Text = mouse_current_position.Y.ToString();
+                lastAnnotationWidthL.Text = Math.Abs(mouse_current_position.X - mouse_start_position.X).ToString();
+                lastAnnotationHeightL.Text = Math.Abs(mouse_current_position.Y - mouse_start_position.Y).ToString();
+            }
+            catch (Exception ex)
+            {
+
+            }
+            
+
+        }
+
+        private void mainPB_MouseUp(object sender, MouseEventArgs e)
+        {
+            mouse_current_position = e.Location;
+            mouseIsDown = false;
+        }
+
+        private void mainPB_Paint(object sender, PaintEventArgs e)
+        {
+            if (mouseIsDown)
+            {
+                /*Make sure that the draw is within the width and height of the image*/
+                mouse_current_position.X = Math.Min(mouse_current_position.X, mainPB.Image.Width);
+                mouse_current_position.Y = Math.Min(mouse_current_position.Y, mainPB.Image.Height);
+
+                mouse_current_position.X = Math.Max(mouse_current_position.X, 0);
+                mouse_current_position.Y = Math.Max(mouse_current_position.Y, 0);
+
+
+                Rectangle rect = new Rectangle(
+                    Math.Min(mouse_current_position.X, mouse_start_position.X),
+                    Math.Min(mouse_current_position.Y, mouse_start_position.Y),
+                    Math.Abs(mouse_current_position.X - mouse_start_position.X),
+                    Math.Abs(mouse_current_position.Y - mouse_start_position.Y));
+
+                Graphics g = e.Graphics;
+                Pen pen = new Pen(Color.Red, 2);
+                g.DrawRectangle(pen, rect);
+                pen.Dispose();
+            }
+        }
+
+        /***********************************Image Remove Button********************************************/
+        private void imgRemoveBTN_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                imageLB.Items.Remove(imageLB.SelectedItem);
+            }
+            catch (Exception ex)
+            {
+            }
+            if (imageLB.Items.Count > 0)
+            {
+                imageLB.SelectedIndex = 0;
+            }
+            else
+            {
+                mainPB.Image = null;
+                mainPB.Refresh();
+            }
+            
         }
     }
 }
