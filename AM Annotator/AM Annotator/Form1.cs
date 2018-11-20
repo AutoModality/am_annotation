@@ -18,17 +18,26 @@ namespace AM_Annotator
 {
     public partial class mainWindow : Form
     {
+        Mat selected_img = new Mat();
+
         private List<string> project_directory_list = new List<string>();
         private List<string> supported_img_format = new List<string>{ "jpg", "jpeg", "png", "gif", "tiff", "bmp" };
         private List<string> current_directory_img_list = new List<string>();
-        private string last_openned_directory = @"C:\";
-        private string output_directory = @"C:\";
+        private List<AnnotationImage> annotation_imgs = new List<AnnotationImage>();
+
+        private FeatureLabel current_annotation = new FeatureLabel();
+
         private Point mouse_start_position = new Point();
         private Point mouse_current_position = new Point();
 
+        private string last_openned_directory = @"C:\";
+        private string output_directory = @"C:\";
+        
+        private bool annotation_selected = false;
+
         bool mouseIsDown = false;
 
-        Mat selected_img = new Mat();
+        
         public mainWindow()
         {
             InitializeComponent();
@@ -248,8 +257,24 @@ namespace AM_Annotator
         {
             mouse_current_position = e.Location;
             mouseIsDown = false;
-        }
 
+            /*Updating the Annotation List for the Current Image*/
+
+            /*Make sure that the draw is within the width and height of the image*/
+            mouse_current_position.X = Math.Min(mouse_current_position.X, mainPB.Image.Width);
+            mouse_current_position.Y = Math.Min(mouse_current_position.Y, mainPB.Image.Height);
+
+            mouse_current_position.X = Math.Max(mouse_current_position.X, 0);
+            mouse_current_position.Y = Math.Max(mouse_current_position.Y, 0);
+
+            var x = Math.Min(mouse_current_position.X, mouse_start_position.X);
+            var y = Math.Min(mouse_current_position.Y, mouse_start_position.Y);
+            var width = Math.Abs(mouse_current_position.X - mouse_start_position.X);
+            var height = Math.Abs(mouse_current_position.Y - mouse_start_position.Y);
+            FeatureLabel fl = new FeatureLabel(0, x, y, width, height);
+            currentImgAnnotationsLB.Items.Add(fl.ToString());
+        }
+        /***********************************Picture Box Paint Event. Call it manually by mainPB.Invalidate()***********************************/
         private void mainPB_Paint(object sender, PaintEventArgs e)
         {
             if (mouseIsDown)
@@ -261,17 +286,41 @@ namespace AM_Annotator
                 mouse_current_position.X = Math.Max(mouse_current_position.X, 0);
                 mouse_current_position.Y = Math.Max(mouse_current_position.Y, 0);
 
-
-                Rectangle rect = new Rectangle(
+                var x = Math.Min(mouse_current_position.X, mouse_start_position.X);
+                var y = Math.Min(mouse_current_position.Y, mouse_start_position.Y);
+                var width = Math.Abs(mouse_current_position.X - mouse_start_position.X);
+                var height = Math.Abs(mouse_current_position.Y - mouse_start_position.Y);
+                /*Rectangle rect = new Rectangle(
                     Math.Min(mouse_current_position.X, mouse_start_position.X),
                     Math.Min(mouse_current_position.Y, mouse_start_position.Y),
                     Math.Abs(mouse_current_position.X - mouse_start_position.X),
-                    Math.Abs(mouse_current_position.Y - mouse_start_position.Y));
+                    Math.Abs(mouse_current_position.Y - mouse_start_position.Y));*/
+                Rectangle rect = new Rectangle(x, y, width, height);
 
                 Graphics g = e.Graphics;
                 Pen pen = new Pen(Color.Red, 2);
                 g.DrawRectangle(pen, rect);
                 pen.Dispose();
+            }
+            else if (annotation_selected)
+            {
+                Rectangle rect = new Rectangle(current_annotation.X, current_annotation.Y, current_annotation.Width, current_annotation.Height);
+
+                Graphics g = e.Graphics;
+                Pen pen = new Pen(Color.Red, 2);
+                g.DrawRectangle(pen, rect);
+
+                
+                // Create font and brush.
+                Font drawFont = new Font("Arial", 16);
+                SolidBrush drawBrush = new SolidBrush(Color.Red);
+                // Set format of string.
+                StringFormat drawFormat = new StringFormat();
+                drawFormat.FormatFlags = StringFormatFlags.DirectionRightToLeft;
+
+                g.DrawString(current_annotation.Id.ToString(), drawFont, drawBrush, current_annotation.X + 20, current_annotation.Y + 5, drawFormat);
+                pen.Dispose();
+                annotation_selected = false;
             }
         }
 
@@ -295,6 +344,29 @@ namespace AM_Annotator
                 mainPB.Refresh();
             }
             
+        }
+
+        //***********************************A callback when an annotation in the list is clicked/***********************************/
+        private void currentImgAnnotationsLB_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            current_annotation = FeatureLabel.FromString(currentImgAnnotationsLB.Text);
+
+            annotation_selected = true;
+            mainPB.Invalidate();
+        }
+
+        //***********************************A callback when delete annotation button is clicked/***********************************/
+        private void deleteAnnotationBTN_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                currentImgAnnotationsLB.Items.Remove(currentImgAnnotationsLB.SelectedItem);
+                currentImgAnnotationsLB.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            { 
+            }
         }
     }
 }
