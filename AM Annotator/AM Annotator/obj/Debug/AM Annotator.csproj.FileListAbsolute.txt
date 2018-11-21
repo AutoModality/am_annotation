@@ -74,3 +74,4 @@ C:\Users\Nanaj\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\De
 C:\Users\Nanaj\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\tr\ZedGraph.resources.dll
 C:\Users\Nanaj\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\zh-cn\ZedGraph.resources.dll
 C:\Users\Nanaj\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\zh-tw\ZedGraph.resources.dll
+C:\Users\Nanaj\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM_Annotator.labelForm.resources

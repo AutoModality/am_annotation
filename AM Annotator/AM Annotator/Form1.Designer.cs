@@ -44,6 +44,9 @@
             this.folderLB = new System.Windows.Forms.ListBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.annotationTab = new System.Windows.Forms.TabPage();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.deleteAnnotationBTN = new System.Windows.Forms.Button();
+            this.currentImgAnnotationsLB = new System.Windows.Forms.ListBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.lastAnnotationEndYL = new System.Windows.Forms.Label();
             this.lastAnnotationEndXL = new System.Windows.Forms.Label();
@@ -72,9 +75,7 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.currentImgAnnotationsLB = new System.Windows.Forms.ListBox();
-            this.deleteAnnotationBTN = new System.Windows.Forms.Button();
+            this.viewAllAnnotationsBTN = new System.Windows.Forms.Button();
             settingsTab = new System.Windows.Forms.TabPage();
             settingsTab.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -82,12 +83,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.mainPB)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.annotationTab.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.toolStrip1.SuspendLayout();
-            this.groupBox6.SuspendLayout();
             this.SuspendLayout();
             // 
             // settingsTab
@@ -96,7 +97,7 @@
             settingsTab.Location = new System.Drawing.Point(4, 22);
             settingsTab.Name = "settingsTab";
             settingsTab.Padding = new System.Windows.Forms.Padding(3);
-            settingsTab.Size = new System.Drawing.Size(1130, 576);
+            settingsTab.Size = new System.Drawing.Size(1140, 704);
             settingsTab.TabIndex = 1;
             settingsTab.Text = "Settings";
             settingsTab.UseVisualStyleBackColor = true;
@@ -274,6 +275,37 @@
             this.annotationTab.TabIndex = 0;
             this.annotationTab.Text = "Annotation";
             this.annotationTab.UseVisualStyleBackColor = true;
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.viewAllAnnotationsBTN);
+            this.groupBox6.Controls.Add(this.deleteAnnotationBTN);
+            this.groupBox6.Controls.Add(this.currentImgAnnotationsLB);
+            this.groupBox6.Location = new System.Drawing.Point(477, 556);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(556, 141);
+            this.groupBox6.TabIndex = 10;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Annotations";
+            // 
+            // deleteAnnotationBTN
+            // 
+            this.deleteAnnotationBTN.Location = new System.Drawing.Point(414, 105);
+            this.deleteAnnotationBTN.Name = "deleteAnnotationBTN";
+            this.deleteAnnotationBTN.Size = new System.Drawing.Size(75, 23);
+            this.deleteAnnotationBTN.TabIndex = 1;
+            this.deleteAnnotationBTN.Text = "Delete Annotation";
+            this.deleteAnnotationBTN.UseVisualStyleBackColor = true;
+            this.deleteAnnotationBTN.Click += new System.EventHandler(this.deleteAnnotationBTN_Click);
+            // 
+            // currentImgAnnotationsLB
+            // 
+            this.currentImgAnnotationsLB.FormattingEnabled = true;
+            this.currentImgAnnotationsLB.Location = new System.Drawing.Point(7, 20);
+            this.currentImgAnnotationsLB.Name = "currentImgAnnotationsLB";
+            this.currentImgAnnotationsLB.Size = new System.Drawing.Size(401, 108);
+            this.currentImgAnnotationsLB.TabIndex = 0;
+            this.currentImgAnnotationsLB.SelectedIndexChanged += new System.EventHandler(this.currentImgAnnotationsLB_SelectedIndexChanged);
             // 
             // groupBox5
             // 
@@ -550,35 +582,15 @@
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
-            // groupBox6
+            // viewAllAnnotationsBTN
             // 
-            this.groupBox6.Controls.Add(this.deleteAnnotationBTN);
-            this.groupBox6.Controls.Add(this.currentImgAnnotationsLB);
-            this.groupBox6.Location = new System.Drawing.Point(477, 556);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(563, 141);
-            this.groupBox6.TabIndex = 10;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Annotations";
-            // 
-            // currentImgAnnotationsLB
-            // 
-            this.currentImgAnnotationsLB.FormattingEnabled = true;
-            this.currentImgAnnotationsLB.Location = new System.Drawing.Point(7, 20);
-            this.currentImgAnnotationsLB.Name = "currentImgAnnotationsLB";
-            this.currentImgAnnotationsLB.Size = new System.Drawing.Size(401, 108);
-            this.currentImgAnnotationsLB.TabIndex = 0;
-            this.currentImgAnnotationsLB.SelectedIndexChanged += new System.EventHandler(this.currentImgAnnotationsLB_SelectedIndexChanged);
-            // 
-            // deleteAnnotationBTN
-            // 
-            this.deleteAnnotationBTN.Location = new System.Drawing.Point(414, 105);
-            this.deleteAnnotationBTN.Name = "deleteAnnotationBTN";
-            this.deleteAnnotationBTN.Size = new System.Drawing.Size(75, 23);
-            this.deleteAnnotationBTN.TabIndex = 1;
-            this.deleteAnnotationBTN.Text = "Delete Annotation";
-            this.deleteAnnotationBTN.UseVisualStyleBackColor = true;
-            this.deleteAnnotationBTN.Click += new System.EventHandler(this.deleteAnnotationBTN_Click);
+            this.viewAllAnnotationsBTN.Location = new System.Drawing.Point(414, 76);
+            this.viewAllAnnotationsBTN.Name = "viewAllAnnotationsBTN";
+            this.viewAllAnnotationsBTN.Size = new System.Drawing.Size(75, 23);
+            this.viewAllAnnotationsBTN.TabIndex = 2;
+            this.viewAllAnnotationsBTN.Text = "View All";
+            this.viewAllAnnotationsBTN.UseVisualStyleBackColor = true;
+            this.viewAllAnnotationsBTN.Click += new System.EventHandler(this.viewAllAnnotationsBTN_Click);
             // 
             // mainWindow
             // 
@@ -601,6 +613,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.mainPB)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.annotationTab.ResumeLayout(false);
+            this.groupBox6.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox4.ResumeLayout(false);
@@ -609,7 +622,6 @@
             this.groupBox2.ResumeLayout(false);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            this.groupBox6.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -662,6 +674,7 @@
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.ListBox currentImgAnnotationsLB;
         private System.Windows.Forms.Button deleteAnnotationBTN;
+        private System.Windows.Forms.Button viewAllAnnotationsBTN;
     }
 }
 

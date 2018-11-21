@@ -24,7 +24,7 @@ namespace AM_Annotator
         private List<string> supported_img_format = new List<string>{ "jpg", "jpeg", "png", "gif", "tiff", "bmp" };
         private List<string> current_directory_img_list = new List<string>();
         private List<AnnotationImage> annotation_imgs = new List<AnnotationImage>();
-
+        private AnnotationImage selected_annotation_img = new AnnotationImage();
         private FeatureLabel current_annotation = new FeatureLabel();
 
         private Point mouse_start_position = new Point();
@@ -32,10 +32,17 @@ namespace AM_Annotator
 
         private string last_openned_directory = @"C:\";
         private string output_directory = @"C:\";
-        
-        private bool annotation_selected = false;
 
-        bool mouseIsDown = false;
+        private double annotation_padding = 0.1;
+
+        private int selected_annotation_index = -1;
+        private int selected_label_index = -1;
+        private int annotation_font_size = 12;
+        
+
+        private bool annotation_selected = false;
+        private bool multi_annotation_view = false;
+        private bool mouseIsDown = false;
 
         
         public mainWindow()
@@ -48,46 +55,60 @@ namespace AM_Annotator
 
         }
 
+        /********************************This is where the load button is pressed*******************************/
+        /*
+         * Actions: 
+         * Reading the directory
+         * Recording the directory if it is not repeated
+         * Adding all the images to the list of AnnotationImages
+         */
         private void loadBTN_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog openDir = new FolderBrowserDialog();
             openDir.SelectedPath = last_openned_directory;
-            //openDir.InitialDirectory = last_openned_directory;
-            //openDir.FilterIndex = 1;
-            //openDir.RestoreDirectory = true;
 
             if (openDir.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(openDir.SelectedPath))
             {
-                last_openned_directory = openDir.SelectedPath;
-                if (!project_directory_list.Contains(last_openned_directory))
+                
+                /*if the directory is not added already*/
+                if (!project_directory_list.Contains(openDir.SelectedPath))
                 {
-                    project_directory_list.Add(last_openned_directory);
-                    updateFolderListBox();
-                    folderLB.SelectedIndex = 0;
+                    /*If it contains any image*/
+                    if (loadImages(openDir.SelectedPath) > 0)
+                    {
+                        last_openned_directory = openDir.SelectedPath;
+                        project_directory_list.Add(last_openned_directory);
+                        updateFolderListBox();
+                        folderLB.SelectedIndex = 0;
+                    }
+                    
+
+                    
                 }
             }
+        }
 
-            /*OpenFileDialog openFile = new OpenFileDialog();
-            if (openFile.ShowDialog() == DialogResult.OK)
+        /*******************************Loading the Images given the directory*********************/
+        /*
+         * The assumption is that we know for sure that the passed directory has not been processed before
+         */
+        private int loadImages(string directory)
+        {
+            int img_cnt = 0;
+            /*looking into the target directory for every hardcoded image format*/
+            foreach (string img_format in supported_img_format)
             {
-               
-                Mat frame = CvInvoke.Imread(openFile.FileName);
-
-                int coef = 1;
-                if (frame.Width > mainPB.Width)
+                var files = Directory.GetFiles(directory, "*." + img_format, SearchOption.TopDirectoryOnly);
+                foreach (string file in files)
                 {
-                    coef = (int)((frame.Width / mainPB.Width * 1.0) + 0.5);
-                }
-                if (frame.Height > mainPB.Height)
-                {
-                    coef = (int)((frame.Height / (mainPB.Height * 1.0)) +0.5); 
+                    annotation_imgs.Add(new AnnotationImage(file));
                 }
 
+                img_cnt += files.Count();
+            }
 
-                CvInvoke.Resize(frame, frame, new Size(frame.Width / coef, frame.Height / coef));
-                Image<Bgr, Byte> my_image = frame.ToImage<Bgr, byte>();
-                mainPB.Image = my_image.ToBitmap();
-            }*/
+            return img_cnt;
+
         }
 
         private void updateFolderListBox()
@@ -131,11 +152,21 @@ namespace AM_Annotator
             
         }
 
+        /****************************************When an image is selected in the image list box*********************************************/
+        /*
+         * The assumption is that images in the list box are already pre-processed and there is an AnnotationImage object for the 
+         * selected image in the project AnnotationImage list
+         */
         private void imageLB_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {
-                selected_img = CvInvoke.Imread(imageLB.SelectedItem.ToString());
+                /*getting the image based on the selected item text*/
+                //selected_annotation_img = getImage(imageLB.SelectedItem.ToString());
+                selected_annotation_index = getImageIndex(imageLB.SelectedItem.ToString());
+
+                /*loading and resizing the image*/
+                selected_img = annotation_imgs[selected_annotation_index].getMat();
 
                 int coef = 1;
                 if (selected_img.Width > mainPB.Width)
@@ -151,6 +182,9 @@ namespace AM_Annotator
                 CvInvoke.Resize(selected_img, selected_img, new Size(selected_img.Width / coef, selected_img.Height / coef));
                 Image<Bgr, Byte> my_image = selected_img.ToImage<Bgr, byte>();
                 mainPB.Image = my_image.ToBitmap();
+
+                /*updating the annotation ListBox*/
+                updateAnnotationLB();
             }
             catch (ArgumentException E)
             {
@@ -253,26 +287,51 @@ namespace AM_Annotator
 
         }
 
+        /***********************************Event when mouse button is released***********************************/
         private void mainPB_MouseUp(object sender, MouseEventArgs e)
         {
-            mouse_current_position = e.Location;
-            mouseIsDown = false;
+            try
+            {
+                mouse_current_position = e.Location;
+                mouseIsDown = false;
 
-            /*Updating the Annotation List for the Current Image*/
+                /*Updating the Annotation List for the Current Image*/
 
-            /*Make sure that the draw is within the width and height of the image*/
-            mouse_current_position.X = Math.Min(mouse_current_position.X, mainPB.Image.Width);
-            mouse_current_position.Y = Math.Min(mouse_current_position.Y, mainPB.Image.Height);
+                /*Make sure that the draw is within the width and height of the image*/
+                mouse_current_position.X = Math.Min(mouse_current_position.X, mainPB.Image.Width);
+                mouse_current_position.Y = Math.Min(mouse_current_position.Y, mainPB.Image.Height);
 
-            mouse_current_position.X = Math.Max(mouse_current_position.X, 0);
-            mouse_current_position.Y = Math.Max(mouse_current_position.Y, 0);
+                mouse_current_position.X = Math.Max(mouse_current_position.X, 0);
+                mouse_current_position.Y = Math.Max(mouse_current_position.Y, 0);
 
-            var x = Math.Min(mouse_current_position.X, mouse_start_position.X);
-            var y = Math.Min(mouse_current_position.Y, mouse_start_position.Y);
-            var width = Math.Abs(mouse_current_position.X - mouse_start_position.X);
-            var height = Math.Abs(mouse_current_position.Y - mouse_start_position.Y);
-            FeatureLabel fl = new FeatureLabel(0, x, y, width, height);
-            currentImgAnnotationsLB.Items.Add(fl.ToString());
+                var x = Math.Min(mouse_current_position.X, mouse_start_position.X);
+                var y = Math.Min(mouse_current_position.Y, mouse_start_position.Y);
+                var width = Math.Abs(mouse_current_position.X - mouse_start_position.X);
+                var height = Math.Abs(mouse_current_position.Y - mouse_start_position.Y);
+                //FeatureLabel fl = new FeatureLabel();
+
+                //Load the id window
+                Form labelWindow = new labelForm();
+                labelWindow.StartPosition = FormStartPosition.Manual;
+                labelWindow.Location = new Point(this.Width / 2, this.Height / 2);
+                if (labelWindow.ShowDialog() == DialogResult.OK)
+                {
+                    //int a = labelForm.LabelClass;
+                    annotation_imgs[selected_annotation_index].addLabel(labelForm.LabelClass, x, y, width, height);
+
+                    //Update Gui
+                    updateAnnotationLB();
+                    viewAllAnnotationsBTN.PerformClick();
+                    //currentImgAnnotationsLB.Items.Add(annotation_imgs[selected_annotation_index].ToString());
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+            }
+            
         }
         /***********************************Picture Box Paint Event. Call it manually by mainPB.Invalidate()***********************************/
         private void mainPB_Paint(object sender, PaintEventArgs e)
@@ -300,27 +359,69 @@ namespace AM_Annotator
                 Graphics g = e.Graphics;
                 Pen pen = new Pen(Color.Red, 2);
                 g.DrawRectangle(pen, rect);
+
+                if (annotation_imgs[selected_annotation_index].getLabels().Count > 0)
+                {
+                    Font drawFont = new Font("Arial", annotation_font_size);
+                    SolidBrush drawBrush = new SolidBrush(Color.Red);
+                    // Set format of string.
+                    StringFormat drawFormat = new StringFormat();
+                    drawFormat.FormatFlags = StringFormatFlags.DirectionRightToLeft;
+                    foreach (FeatureLabel fl in annotation_imgs[selected_annotation_index].getLabels())
+                    {
+                        g.DrawRectangle(pen, new Rectangle(fl.X, fl.Y, fl.Width, fl.Height));
+                        g.DrawString(fl.Id.ToString(), drawFont, drawBrush, Convert.ToInt32(fl.End_X - fl.Width * annotation_padding), Convert.ToInt32(fl.Y + fl.Height * annotation_padding), drawFormat);
+                    }
+                }
+                
+
+
                 pen.Dispose();
             }
             else if (annotation_selected)
             {
-                Rectangle rect = new Rectangle(current_annotation.X, current_annotation.Y, current_annotation.Width, current_annotation.Height);
+                Rectangle rect = new Rectangle(annotation_imgs[selected_annotation_index].getLabelAt(selected_label_index).X, 
+                    annotation_imgs[selected_annotation_index].getLabelAt(selected_label_index).Y, 
+                    annotation_imgs[selected_annotation_index].getLabelAt(selected_label_index).Width, 
+                    annotation_imgs[selected_annotation_index].getLabelAt(selected_label_index).Height);
 
                 Graphics g = e.Graphics;
                 Pen pen = new Pen(Color.Red, 2);
                 g.DrawRectangle(pen, rect);
 
-                
+
                 // Create font and brush.
-                Font drawFont = new Font("Arial", 16);
+                Font drawFont = new Font("Arial", annotation_font_size,FontStyle.Bold);
                 SolidBrush drawBrush = new SolidBrush(Color.Red);
                 // Set format of string.
                 StringFormat drawFormat = new StringFormat();
                 drawFormat.FormatFlags = StringFormatFlags.DirectionRightToLeft;
 
-                g.DrawString(current_annotation.Id.ToString(), drawFont, drawBrush, current_annotation.X + 20, current_annotation.Y + 5, drawFormat);
+                g.DrawString(annotation_imgs[selected_annotation_index].getLabelAt(selected_label_index).Id.ToString(), drawFont, drawBrush,
+                    annotation_imgs[selected_annotation_index].getLabelAt(selected_label_index).End_X - Convert.ToInt32(annotation_imgs[selected_annotation_index].getLabelAt(selected_label_index).Width * annotation_padding),
+                    annotation_imgs[selected_annotation_index].getLabelAt(selected_label_index).Y + Convert.ToInt32(annotation_imgs[selected_annotation_index].getLabelAt(selected_label_index).Height * annotation_padding), drawFormat);
                 pen.Dispose();
                 annotation_selected = false;
+            }
+            else if (multi_annotation_view)
+            {
+                Graphics g = e.Graphics;
+                Pen pen = new Pen(Color.Red, 2);
+                // Create font and brush.
+                Font drawFont = new Font("Arial", annotation_font_size);
+                SolidBrush drawBrush = new SolidBrush(Color.Red);
+                // Set format of string.
+                StringFormat drawFormat = new StringFormat();
+                drawFormat.FormatFlags = StringFormatFlags.DirectionRightToLeft;
+                foreach (FeatureLabel fl in annotation_imgs[selected_annotation_index].getLabels())
+                {
+                    g.DrawRectangle(pen, new Rectangle(fl.X, fl.Y, fl.Width, fl.Height));
+                    g.DrawString(fl.Id.ToString(), drawFont, drawBrush, Convert.ToInt32(fl.End_X - fl.Width * annotation_padding), Convert.ToInt32(fl.Y + fl.Height * annotation_padding), drawFormat);
+                }
+                       
+                pen.Dispose();
+
+                multi_annotation_view = false;
             }
         }
 
@@ -349,23 +450,68 @@ namespace AM_Annotator
         //***********************************A callback when an annotation in the list is clicked/***********************************/
         private void currentImgAnnotationsLB_SelectedIndexChanged(object sender, EventArgs e)
         {
-
-            current_annotation = FeatureLabel.FromString(currentImgAnnotationsLB.Text);
-
+            selected_label_index = currentImgAnnotationsLB.SelectedIndex;
+            //current_annotation = FeatureLabel.FromString(currentImgAnnotationsLB.Text);
             annotation_selected = true;
             mainPB.Invalidate();
         }
 
-        //***********************************A callback when delete annotation button is clicked/***********************************/
+        /***********************************A callback when delete annotation button is clicked***********************************/
         private void deleteAnnotationBTN_Click(object sender, EventArgs e)
         {
             try
             {
-                currentImgAnnotationsLB.Items.Remove(currentImgAnnotationsLB.SelectedItem);
-                currentImgAnnotationsLB.SelectedIndex = 0;
+                if (annotation_imgs[selected_annotation_index].getLabels().Count > 0)
+                {
+                    annotation_imgs[selected_annotation_index].RemoveLabelAt(currentImgAnnotationsLB.SelectedIndex);
+                    updateAnnotationLB();
+                }
+                if (annotation_imgs[selected_annotation_index].getLabels().Count <= 0)
+                {
+                    imageLB.SetSelected(imageLB.SelectedIndex, true);
+                    
+                }
+                
+                              
             }
             catch (Exception ex)
             { 
+            }
+        }
+
+        /***********************************Given a file location, return the feature label***********************************/
+        private AnnotationImage getImage(string file_location)
+        {
+            return annotation_imgs.Find(img => img.getImageLocation() == file_location);
+        }
+        /***********************************Given a file location, return the feature label index***********************************/
+        private int getImageIndex(string file_location)
+        {
+            return annotation_imgs.FindIndex(img => img.getImageLocation() == file_location);
+        }
+
+        /***********************************A routine to update the currentAnnotationLB based on the global selected annotation image***********************************/
+        private void updateAnnotationLB()
+        {
+            currentImgAnnotationsLB.Items.Clear();
+            foreach (string annotation in annotation_imgs[selected_annotation_index].getLabelsString())
+            {
+                currentImgAnnotationsLB.Items.Add(annotation);
+            }
+            if (annotation_imgs.Count > 0 && annotation_imgs[selected_annotation_index].getLabels().Count() > 0)
+            {
+                multi_annotation_view = true;
+                mainPB.Invalidate();
+            }
+        }
+
+        /***********************************A routine to view all annotations in the global index***********************************/
+        private void viewAllAnnotationsBTN_Click(object sender, EventArgs e)
+        {
+            if (annotation_imgs.Count > 0 && annotation_imgs[selected_annotation_index].getLabels().Count() > 0)
+            {
+                multi_annotation_view = true;
+                mainPB.Invalidate();
             }
         }
     }
