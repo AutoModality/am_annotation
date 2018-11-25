@@ -11,13 +11,14 @@ using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.Util;
 using Emgu.CV.Structure;
-
-
+using System.Xml;
 
 namespace AM_Annotator
 {
     public partial class mainWindow : Form
     {
+        OpencvAnnotationFormat opencv_annotation = new OpencvAnnotationFormat();
+
         Mat selected_img = new Mat();
 
         private List<string> project_directory_list = new List<string>();
@@ -32,6 +33,7 @@ namespace AM_Annotator
 
         private string last_openned_directory = @"C:\";
         private string output_directory = @"C:\";
+        private string project_path = "Untitled";
 
         private double annotation_padding = 0.1;
 
@@ -52,7 +54,9 @@ namespace AM_Annotator
 
         private void mainWindow_Load(object sender, EventArgs e)
         {
-
+            this.Text = project_path;
+            Properties.Settings.Default.ProjectDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Annotations";
+            opencv_annotation = new OpencvAnnotationFormat(Properties.Settings.Default.ProjectDirectory);
         }
 
         /********************************This is where the load button is pressed*******************************/
@@ -80,6 +84,7 @@ namespace AM_Annotator
                         project_directory_list.Add(last_openned_directory);
                         updateFolderListBox();
                         folderLB.SelectedIndex = 0;
+                        AlertUnsavedProject(false);
                     }
                     
 
@@ -211,6 +216,7 @@ namespace AM_Annotator
                    
                     mainPB.Image = null;
                     mainPB.Refresh();
+                    AlertUnsavedProject(false);
                 }
             }
             catch (NullReferenceException nre)
@@ -227,7 +233,7 @@ namespace AM_Annotator
             if (openDir.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(openDir.SelectedPath))
             {
                 output_directory = openDir.SelectedPath;
-                outputDirectoryTB.Text = openDir.SelectedPath;
+                //outputDirectoryTB.Text = openDir.SelectedPath;
             }
         }
 
@@ -322,11 +328,10 @@ namespace AM_Annotator
                     //Update Gui
                     updateAnnotationLB();
                     viewAllAnnotationsBTN.PerformClick();
+                    opencv_annotation.Add(annotation_imgs[selected_annotation_index].getImageLocation(), new FeatureLabel(labelForm.LabelClass, new Rectangle(x, y, width, height)));
                     //currentImgAnnotationsLB.Items.Add(annotation_imgs[selected_annotation_index].ToString());
+                    AlertUnsavedProject(false);
                 }
-
-
-
             }
             catch (Exception ex)
             {
@@ -431,6 +436,7 @@ namespace AM_Annotator
             try
             {
                 imageLB.Items.Remove(imageLB.SelectedItem);
+                AlertUnsavedProject(false);
             }
             catch (Exception ex)
             {
@@ -463,8 +469,11 @@ namespace AM_Annotator
             {
                 if (annotation_imgs[selected_annotation_index].getLabels().Count > 0)
                 {
+                    opencv_annotation.remove(annotation_imgs[selected_annotation_index].getImageLocation(), annotation_imgs[selected_annotation_index].getLabelAt(currentImgAnnotationsLB.SelectedIndex));
                     annotation_imgs[selected_annotation_index].RemoveLabelAt(currentImgAnnotationsLB.SelectedIndex);
                     updateAnnotationLB();
+                    AlertUnsavedProject(false);
+
                 }
                 if (annotation_imgs[selected_annotation_index].getLabels().Count <= 0)
                 {
@@ -512,6 +521,198 @@ namespace AM_Annotator
             {
                 multi_annotation_view = true;
                 mainPB.Invalidate();
+            }
+        }
+
+
+        /***********************************When Preferences Button is pressed***********************************/
+        private void preferencesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form settingForm = new SettingForm();
+            settingForm.ShowDialog();
+        }
+
+        private void dataCollectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        /************************************Saving The Entire Workspace when saveWorkspaceToolStripMenuItem is clicked***********************************/
+        private void saveWorkspaceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (project_path.Contains("Untitled"))
+            {
+                SaveFileDialog save_window = new SaveFileDialog();
+                save_window.Filter = "AM File|*.am";
+                save_window.Title = "Save the Configurations";
+                if (save_window.ShowDialog() == DialogResult.OK && save_window.FileName != "")
+                {
+                    SaveConfiguration(save_window.FileName);
+                }
+                project_path = save_window.FileName;
+                return;
+            }
+
+            
+            SaveConfiguration(project_path);
+
+
+
+        }
+        private void SaveConfiguration(string file_location)
+        {
+            //Setting up XMLWriter Object
+            XmlWriterSettings writer_settings = new XmlWriterSettings();
+            writer_settings.NewLineHandling = NewLineHandling.Replace;
+            writer_settings.NewLineChars = Environment.NewLine;
+            writer_settings.IndentChars = ("\t");
+            writer_settings.Indent = true;
+            writer_settings.ConformanceLevel = ConformanceLevel.Auto;
+
+            XmlWriter writer = XmlWriter.Create(file_location, writer_settings);
+
+            //Writing the Components
+            writer.WriteStartDocument();
+
+            writer.WriteStartElement("Project");
+            writer.WriteAttributeString("Name", Path.GetFileName(file_location));
+
+            //Writing Project Setting
+            writer.WriteStartElement("Setting");
+            writer.WriteStartElement("Formats");
+
+            writer.WriteAttributeString("Opencv", Convert.ToString(Properties.Settings.Default.OpencvAnnotation));
+            writer.WriteAttributeString("Darknet", Convert.ToString(Properties.Settings.Default.DarknetAnnotation));
+            writer.WriteAttributeString("Pascal", Convert.ToString(Properties.Settings.Default.PascalVOCAnnotation));
+
+            writer.WriteEndElement();
+
+
+            writer.WriteEndElement();
+
+            //Writing The folder name
+            foreach (string folder in folderLB.Items)
+            {
+                writer.WriteStartElement("Folder");
+                writer.WriteAttributeString("Location", folder);
+
+                //Getting all the images that contains the parent folder
+                List<AnnotationImage> annotation_images = annotation_imgs.Where(x => x.getImageLocation().Contains(folder)).ToList();
+
+                foreach (AnnotationImage annotation_image in annotation_images)
+                {
+                    writer.WriteStartElement("Image");
+
+                    writer.WriteAttributeString("Location", annotation_image.getImageLocation());
+
+                    List<FeatureLabel> labels = annotation_image.getLabels();
+                    foreach (FeatureLabel label in labels)
+                    {
+                        writer.WriteStartElement("Annotation");
+
+                        writer.WriteAttributeString("Id", label.Id.ToString());
+
+                        writer.WriteAttributeString("X", label.X.ToString());
+
+                        writer.WriteAttributeString("Y", label.Y.ToString());
+
+                        writer.WriteAttributeString("Width", label.Width.ToString());
+
+                        writer.WriteAttributeString("Height", label.Height.ToString());
+
+                        writer.WriteEndElement();
+                    }
+                                        
+                    writer.WriteEndElement();
+                }
+                
+
+                
+                writer.WriteEndElement();
+            }
+            writer.WriteEndElement();
+            writer.WriteEndDocument();
+
+
+            //writer.Flush();
+            writer.Close();
+
+            AlertUnsavedProject(true);
+        }
+        /************************************Saving The Entire Workspace when newProjectToolStripMenuItem is clicked***********************************/
+        private void newProjectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog open_window = new OpenFileDialog();
+            open_window.InitialDirectory =  Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            open_window.Filter = "AM File|*.am";
+            open_window.Title = "Choose AM Configuration Files";
+
+            if (open_window.ShowDialog() == DialogResult.OK)
+            {
+                LoadConfiguration(open_window.FileName);
+            }
+        }
+        private void LoadConfiguration(string file_location)
+        {
+            XmlReader reader = XmlReader.Create(file_location);
+
+            reader.MoveToContent();
+            AnnotationImage ai = new AnnotationImage();
+            bool newAnnotationImage = false;
+            while (reader.Read())
+            {
+
+                if (reader.NodeType == XmlNodeType.Element)
+                {
+                    if (reader.Name == "Formats")
+                    {
+                        Properties.Settings.Default.OpencvAnnotation = Convert.ToBoolean(reader.GetAttribute("Opencv"));
+                        Properties.Settings.Default.DarknetAnnotation = Convert.ToBoolean(reader.GetAttribute("Darknet"));
+                        Properties.Settings.Default.PascalVOCAnnotation = Convert.ToBoolean(reader.GetAttribute("Pascal"));
+                    }
+                    if (reader.Name == "Folder")
+                    {
+                        folderLB.Items.Add(reader.GetAttribute("Location"));                        
+                    }
+                    if (reader.Name == "Image")
+                    {
+                        ai = new AnnotationImage(reader.GetAttribute("Location"));
+                        newAnnotationImage = true;
+                    }
+                    if (reader.Name == "Annotation")
+                    {
+                        ai.addLabel(Convert.ToInt32(reader.GetAttribute("Id")), Convert.ToInt32(reader.GetAttribute("X")),
+                            Convert.ToInt32(reader.GetAttribute("Y")), Convert.ToInt32(reader.GetAttribute("Width")),
+                            Convert.ToInt32(reader.GetAttribute("Height")));
+                        var s1 = ai.getFileName();
+                        var s2 = ai.getParentFolder();
+                        
+                    }
+                    if (newAnnotationImage)
+                    {
+                        annotation_imgs.Add(ai);
+                        newAnnotationImage = false;
+                    }
+                }
+            }
+        }
+
+        /***********************************************Unsaved Alret Routine************************************************/
+        private void AlertUnsavedProject(bool clearFlag)
+        {
+            if (clearFlag)
+            {
+                if (this.Text.Contains("*"))
+                {
+                    this.Text = project_path;
+                }
+                return;
+            }
+            //if (!project_path.Contains("*"))
+            if(!this.Text.Contains("*"))
+            {
+                //project_path += "*";
+                this.Text = project_path + "*";
             }
         }
     }

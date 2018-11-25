@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Emgu.CV;
 using System.Drawing;
 using Emgu.CV.Structure;
+using System.IO;
 
 namespace AM_Annotator
 {
@@ -86,6 +87,14 @@ namespace AM_Annotator
                 annotations_str.Add(label.ToString());
             }
             return annotations_str;
+        }
+        public string getParentFolder()
+        {
+            return Path.GetPathRoot(img_location);
+        }
+        public string getFileName()
+        {
+            return Path.GetFileName(img_location);
         }
        
     }
