@@ -54,6 +54,10 @@ namespace AM_Annotator
 
         private void mainWindow_Load(object sender, EventArgs e)
         {
+            this.StartPosition = FormStartPosition.Manual;
+            this.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 4, Screen.PrimaryScreen.Bounds.Height / 4);
+            this.BringToFront();
+
             this.Text = project_path;
             Properties.Settings.Default.ProjectDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Annotations";
             opencv_annotation = new OpencvAnnotationFormat(Properties.Settings.Default.ProjectDirectory);
