@@ -78,6 +78,7 @@
       <DependentUpon>labelForm.cs</DependentUpon>
     </Compile>
     <Compile Include="OpencvAnnotationFormat.cs" />
+    <Compile Include="PascalVOCAnnotationFormat.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingForm.cs">

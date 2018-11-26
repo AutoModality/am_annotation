@@ -14,6 +14,9 @@ namespace AM_Annotator
     {
         private string img_location;
         private bool ErrorInReading;
+        private int width;
+        private int height;
+        private int channel;
         private List<FeatureLabel> labels = new List<FeatureLabel>();
 
         public AnnotationImage()
@@ -25,6 +28,9 @@ namespace AM_Annotator
             try
             {
                 var Image = CvInvoke.Imread(img_location);
+                width = Image.Width;
+                height = Image.Height;
+                channel = Image.NumberOfChannels;
             }
             catch (Exception e)
             {
@@ -90,11 +96,24 @@ namespace AM_Annotator
         }
         public string getParentFolder()
         {
-            return Path.GetPathRoot(img_location);
+            return Convert.ToString(Directory.GetParent(img_location).Name);
+            //return Path.GetPathRoot(img_location);
         }
         public string getFileName()
         {
             return Path.GetFileName(img_location);
+        }
+        public int getWidth()
+        {
+            return width;
+        }
+        public int getHeight()
+        {
+            return height;
+        }
+        public int getNumOfChannels()
+        {
+            return channel;
         }
        
     }
