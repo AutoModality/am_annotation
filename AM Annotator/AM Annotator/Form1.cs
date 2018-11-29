@@ -12,6 +12,7 @@ using Emgu.CV;
 using Emgu.Util;
 using Emgu.CV.Structure;
 using System.Xml;
+using System.Threading;
 
 namespace AM_Annotator
 {
@@ -46,17 +47,30 @@ namespace AM_Annotator
         private bool multi_annotation_view = false;
         private bool mouseIsDown = false;
 
-        
+
         public mainWindow()
         {
+            Thread t = new Thread(new ThreadStart(StartSplash));
+            t.Start();
+            Thread.Sleep(5000);
+
             InitializeComponent();
+
+            t.Abort(); 
+        }
+
+        public void StartSplash()
+        {
+            Application.Run(new SplashForm());
         }
 
         private void mainWindow_Load(object sender, EventArgs e)
         {
+           
             this.StartPosition = FormStartPosition.Manual;
             this.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 4, Screen.PrimaryScreen.Bounds.Height / 4);
             this.BringToFront();
+            this.TopMost = true;
 
             this.Text = project_path;
             Properties.Settings.Default.ProjectDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Annotations";
