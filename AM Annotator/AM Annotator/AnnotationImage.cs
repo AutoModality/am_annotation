@@ -10,7 +10,7 @@ using System.IO;
 
 namespace AM_Annotator
 {
-    class AnnotationImage
+    public class AnnotationImage
     {
         private string img_location;
         private bool ErrorInReading;
@@ -18,7 +18,8 @@ namespace AM_Annotator
         private int height;
         private int channel;
         private List<FeatureLabel> labels = new List<FeatureLabel>();
-
+        
+        //Constructors
         public AnnotationImage()
         {
         }
@@ -37,34 +38,35 @@ namespace AM_Annotator
                 ErrorInReading = true;
             }
         }
+        
 
-        public bool isValid()
+        public bool IsValid()
         {
             return ErrorInReading;
         }
-        public bool isEmpty()
+        public bool IsEmpty()
         {
             var Image = CvInvoke.Imread(img_location);
             return Image.IsEmpty;
         }
-        public Mat getMat()
+        public Mat GetMat()
         {
             return CvInvoke.Imread(img_location);
         }
-        public Image getImage()
+        public Image GetImage()
         {
             Image<Bgr, Byte> my_image = CvInvoke.Imread(img_location).ToImage<Bgr, byte>();
             return my_image.ToBitmap();
         }
-        public string getImageLocation()
+        public string GetImageLocation()
         {
             return img_location;
         }
-        public void addLabel(FeatureLabel fl)
+        public void AddLabel(FeatureLabel fl)
         {
             labels.Add(fl);
         }
-        public void addLabel(int id, int x, int y, int width, int height)
+        public void AddLabel(int id, int x, int y, int width, int height)
         {
             labels.Add(new FeatureLabel(id, x, y, width, height));
         }
@@ -72,7 +74,9 @@ namespace AM_Annotator
         {
             labels.RemoveAt(index);
         }
-        public FeatureLabel getLabelAt(int index) 
+
+        //Getting all the labels Absolute and Relative
+        public FeatureLabel GetLabelAt(int index) 
         {
             if (index < 0 || index > labels.Count)
             {
@@ -81,11 +85,28 @@ namespace AM_Annotator
 
             return labels[index];
         }
-        public List<FeatureLabel> getLabels()
+        //Getting all Absolute Labels
+        public List<FeatureLabel> GetLabels()
         {
             return labels;
         }
-        public List<string> getLabelsString()
+
+        //Getting All Relative Labels
+        public List<FeatureLabel> GetRelativeLabels()
+        {
+            List<FeatureLabel> relative_labels = new List<FeatureLabel>();
+
+            foreach (FeatureLabel label in labels)
+            {
+                FeatureLabel fl = new FeatureLabel(label.Id, Convert.ToInt32(label.X / width), Convert.ToInt32(label.Y / height), Convert.ToInt32(label.Width / width), Convert.ToInt32(label.Height/ height));
+                relative_labels.Add(fl);
+            }
+
+            return relative_labels;
+        }
+
+        //Getting absolute labels in string format
+        public List<string> GetAbsoluteString()
         {
             List<string> annotations_str = new List<string>();
             foreach(FeatureLabel label in labels)
@@ -94,24 +115,39 @@ namespace AM_Annotator
             }
             return annotations_str;
         }
-        public string getParentFolder()
+
+        //Getting relative labels in string format
+        public List<string> GetRelativesString()
+        {
+            List<string> annotation_str = new List<string>();
+            foreach (FeatureLabel label in labels)
+            {
+                annotation_str.Add(label.Id.ToString() + " " + Convert.ToInt32(label.X / width).ToString() + " " + Convert.ToInt32(label.Y / height).ToString()
+                    + " " + Convert.ToInt32(label.Width / width).ToString() + " " + Convert.ToInt32(label.Height / height));
+            }
+
+            return annotation_str;
+        }
+
+
+        public string GetParentFolder()
         {
             return Convert.ToString(Directory.GetParent(img_location).Name);
             //return Path.GetPathRoot(img_location);
         }
-        public string getFileName()
+        public string GetFileName()
         {
             return Path.GetFileName(img_location);
         }
-        public int getWidth()
+        public int GetWidth()
         {
             return width;
         }
-        public int getHeight()
+        public int GetHeight()
         {
             return height;
         }
-        public int getNumOfChannels()
+        public int GetNumOfChannels()
         {
             return channel;
         }

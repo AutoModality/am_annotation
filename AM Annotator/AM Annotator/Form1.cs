@@ -13,13 +13,12 @@ using Emgu.Util;
 using Emgu.CV.Structure;
 using System.Xml;
 using System.Threading;
+using System.Diagnostics;
 
 namespace AM_Annotator
 {
     public partial class mainWindow : Form
     {
-        OpencvAnnotationFormat opencv_annotation = new OpencvAnnotationFormat();
-
         Mat selected_img = new Mat();
 
         private List<string> project_directory_list = new List<string>();
@@ -68,13 +67,14 @@ namespace AM_Annotator
         {
            
             this.StartPosition = FormStartPosition.Manual;
-            this.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 4, Screen.PrimaryScreen.Bounds.Height / 4);
+            this.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 5, Screen.PrimaryScreen.Bounds.Height / 5);
             this.BringToFront();
             this.TopMost = true;
 
+            Properties.Settings.Default.ProjectLocation = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Annotator\\" + DateTime.Now.ToString("MM.dd.yyyy") + "_" + DateTime.Now.ToString("HH-mm");
+            Directory.CreateDirectory(Properties.Settings.Default.ProjectLocation);
+            openProjectBTN.Text = Properties.Settings.Default.ProjectLocation;
             this.Text = project_path;
-            Properties.Settings.Default.ProjectDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Annotations";
-            opencv_annotation = new OpencvAnnotationFormat(Properties.Settings.Default.ProjectDirectory);
         }
 
         /********************************This is where the load button is pressed*******************************/
@@ -117,19 +117,20 @@ namespace AM_Annotator
          */
         private int loadImages(string directory)
         {
+
             int img_cnt = 0;
             /*looking into the target directory for every hardcoded image format*/
-            foreach (string img_format in supported_img_format)
+            for(int i = 0; i < supported_img_format.Count; i++) 
             {
-                var files = Directory.GetFiles(directory, "*." + img_format, SearchOption.TopDirectoryOnly);
+                var files = Directory.GetFiles(directory, "*." + supported_img_format[i], SearchOption.TopDirectoryOnly);
                 foreach (string file in files)
                 {
                     annotation_imgs.Add(new AnnotationImage(file));
                 }
-
+                loadImageProgressBar.Value = (int)(i * 100.0 / supported_img_format.Count);
                 img_cnt += files.Count();
             }
-
+            loadImageProgressBar.Value = loadImageProgressBar.Maximum;
             return img_cnt;
 
         }
@@ -189,7 +190,7 @@ namespace AM_Annotator
                 selected_annotation_index = getImageIndex(imageLB.SelectedItem.ToString());
 
                 /*loading and resizing the image*/
-                selected_img = annotation_imgs[selected_annotation_index].getMat();
+                selected_img = annotation_imgs[selected_annotation_index].GetMat();
 
                 int coef = 1;
                 if (selected_img.Width > mainPB.Width)
@@ -341,12 +342,11 @@ namespace AM_Annotator
                 if (labelWindow.ShowDialog() == DialogResult.OK)
                 {
                     //int a = labelForm.LabelClass;
-                    annotation_imgs[selected_annotation_index].addLabel(labelForm.LabelClass, x, y, width, height);
+                    annotation_imgs[selected_annotation_index].AddLabel(labelForm.LabelClass, x, y, width, height);
 
                     //Update Gui
                     updateAnnotationLB();
                     viewAllAnnotationsBTN.PerformClick();
-                    opencv_annotation.Add(annotation_imgs[selected_annotation_index].getImageLocation(), new FeatureLabel(labelForm.LabelClass, new Rectangle(x, y, width, height)));
                     //currentImgAnnotationsLB.Items.Add(annotation_imgs[selected_annotation_index].ToString());
                     AlertUnsavedProject(false);
                 }
@@ -383,14 +383,14 @@ namespace AM_Annotator
                 Pen pen = new Pen(Color.Red, 2);
                 g.DrawRectangle(pen, rect);
 
-                if (annotation_imgs[selected_annotation_index].getLabels().Count > 0)
+                if (annotation_imgs[selected_annotation_index].GetLabels().Count > 0)
                 {
                     Font drawFont = new Font("Arial", annotation_font_size);
                     SolidBrush drawBrush = new SolidBrush(Color.Red);
                     // Set format of string.
                     StringFormat drawFormat = new StringFormat();
                     drawFormat.FormatFlags = StringFormatFlags.DirectionRightToLeft;
-                    foreach (FeatureLabel fl in annotation_imgs[selected_annotation_index].getLabels())
+                    foreach (FeatureLabel fl in annotation_imgs[selected_annotation_index].GetLabels())
                     {
                         g.DrawRectangle(pen, new Rectangle(fl.X, fl.Y, fl.Width, fl.Height));
                         g.DrawString(fl.Id.ToString(), drawFont, drawBrush, Convert.ToInt32(fl.End_X - fl.Width * annotation_padding), Convert.ToInt32(fl.Y + fl.Height * annotation_padding), drawFormat);
@@ -403,10 +403,10 @@ namespace AM_Annotator
             }
             else if (annotation_selected)
             {
-                Rectangle rect = new Rectangle(annotation_imgs[selected_annotation_index].getLabelAt(selected_label_index).X, 
-                    annotation_imgs[selected_annotation_index].getLabelAt(selected_label_index).Y, 
-                    annotation_imgs[selected_annotation_index].getLabelAt(selected_label_index).Width, 
-                    annotation_imgs[selected_annotation_index].getLabelAt(selected_label_index).Height);
+                Rectangle rect = new Rectangle(annotation_imgs[selected_annotation_index].GetLabelAt(selected_label_index).X, 
+                    annotation_imgs[selected_annotation_index].GetLabelAt(selected_label_index).Y, 
+                    annotation_imgs[selected_annotation_index].GetLabelAt(selected_label_index).Width, 
+                    annotation_imgs[selected_annotation_index].GetLabelAt(selected_label_index).Height);
 
                 Graphics g = e.Graphics;
                 Pen pen = new Pen(Color.Red, 2);
@@ -420,9 +420,9 @@ namespace AM_Annotator
                 StringFormat drawFormat = new StringFormat();
                 drawFormat.FormatFlags = StringFormatFlags.DirectionRightToLeft;
 
-                g.DrawString(annotation_imgs[selected_annotation_index].getLabelAt(selected_label_index).Id.ToString(), drawFont, drawBrush,
-                    annotation_imgs[selected_annotation_index].getLabelAt(selected_label_index).End_X - Convert.ToInt32(annotation_imgs[selected_annotation_index].getLabelAt(selected_label_index).Width * annotation_padding),
-                    annotation_imgs[selected_annotation_index].getLabelAt(selected_label_index).Y + Convert.ToInt32(annotation_imgs[selected_annotation_index].getLabelAt(selected_label_index).Height * annotation_padding), drawFormat);
+                g.DrawString(annotation_imgs[selected_annotation_index].GetLabelAt(selected_label_index).Id.ToString(), drawFont, drawBrush,
+                    annotation_imgs[selected_annotation_index].GetLabelAt(selected_label_index).End_X - Convert.ToInt32(annotation_imgs[selected_annotation_index].GetLabelAt(selected_label_index).Width * annotation_padding),
+                    annotation_imgs[selected_annotation_index].GetLabelAt(selected_label_index).Y + Convert.ToInt32(annotation_imgs[selected_annotation_index].GetLabelAt(selected_label_index).Height * annotation_padding), drawFormat);
                 pen.Dispose();
                 annotation_selected = false;
             }
@@ -436,7 +436,7 @@ namespace AM_Annotator
                 // Set format of string.
                 StringFormat drawFormat = new StringFormat();
                 drawFormat.FormatFlags = StringFormatFlags.DirectionRightToLeft;
-                foreach (FeatureLabel fl in annotation_imgs[selected_annotation_index].getLabels())
+                foreach (FeatureLabel fl in annotation_imgs[selected_annotation_index].GetLabels())
                 {
                     g.DrawRectangle(pen, new Rectangle(fl.X, fl.Y, fl.Width, fl.Height));
                     g.DrawString(fl.Id.ToString(), drawFont, drawBrush, Convert.ToInt32(fl.End_X - fl.Width * annotation_padding), Convert.ToInt32(fl.Y + fl.Height * annotation_padding), drawFormat);
@@ -485,15 +485,14 @@ namespace AM_Annotator
         {
             try
             {
-                if (annotation_imgs[selected_annotation_index].getLabels().Count > 0)
+                if (annotation_imgs[selected_annotation_index].GetLabels().Count > 0)
                 {
-                    opencv_annotation.remove(annotation_imgs[selected_annotation_index].getImageLocation(), annotation_imgs[selected_annotation_index].getLabelAt(currentImgAnnotationsLB.SelectedIndex));
                     annotation_imgs[selected_annotation_index].RemoveLabelAt(currentImgAnnotationsLB.SelectedIndex);
                     updateAnnotationLB();
                     AlertUnsavedProject(false);
 
                 }
-                if (annotation_imgs[selected_annotation_index].getLabels().Count <= 0)
+                if (annotation_imgs[selected_annotation_index].GetLabels().Count <= 0)
                 {
                     imageLB.SetSelected(imageLB.SelectedIndex, true);
                     
@@ -509,23 +508,23 @@ namespace AM_Annotator
         /***********************************Given a file location, return the feature label***********************************/
         private AnnotationImage getImage(string file_location)
         {
-            return annotation_imgs.Find(img => img.getImageLocation() == file_location);
+            return annotation_imgs.Find(img => img.GetImageLocation() == file_location);
         }
         /***********************************Given a file location, return the feature label index***********************************/
         private int getImageIndex(string file_location)
         {
-            return annotation_imgs.FindIndex(img => img.getImageLocation() == file_location);
+            return annotation_imgs.FindIndex(img => img.GetImageLocation() == file_location);
         }
 
         /***********************************A routine to update the currentAnnotationLB based on the global selected annotation image***********************************/
         private void updateAnnotationLB()
         {
             currentImgAnnotationsLB.Items.Clear();
-            foreach (string annotation in annotation_imgs[selected_annotation_index].getLabelsString())
+            foreach (string annotation in annotation_imgs[selected_annotation_index].GetAbsoluteString())
             {
                 currentImgAnnotationsLB.Items.Add(annotation);
             }
-            if (annotation_imgs.Count > 0 && annotation_imgs[selected_annotation_index].getLabels().Count() > 0)
+            if (annotation_imgs.Count > 0 && annotation_imgs[selected_annotation_index].GetLabels().Count() > 0)
             {
                 multi_annotation_view = true;
                 mainPB.Invalidate();
@@ -535,7 +534,7 @@ namespace AM_Annotator
         /***********************************A routine to view all annotations in the global index***********************************/
         private void viewAllAnnotationsBTN_Click(object sender, EventArgs e)
         {
-            if (annotation_imgs.Count > 0 && annotation_imgs[selected_annotation_index].getLabels().Count() > 0)
+            if (annotation_imgs.Count > 0 && annotation_imgs[selected_annotation_index].GetLabels().Count() > 0)
             {
                 multi_annotation_view = true;
                 mainPB.Invalidate();
@@ -615,15 +614,15 @@ namespace AM_Annotator
                 writer.WriteAttributeString("Location", folder);
 
                 //Getting all the images that contains the parent folder
-                List<AnnotationImage> annotation_images = annotation_imgs.Where(x => x.getImageLocation().Contains(folder)).ToList();
+                List<AnnotationImage> annotation_images = annotation_imgs.Where(x => x.GetImageLocation().Contains(folder)).ToList();
 
                 foreach (AnnotationImage annotation_image in annotation_images)
                 {
                     writer.WriteStartElement("Image");
 
-                    writer.WriteAttributeString("Location", annotation_image.getImageLocation());
+                    writer.WriteAttributeString("Location", annotation_image.GetImageLocation());
 
-                    List<FeatureLabel> labels = annotation_image.getLabels();
+                    List<FeatureLabel> labels = annotation_image.GetLabels();
                     foreach (FeatureLabel label in labels)
                     {
                         writer.WriteStartElement("Annotation");
@@ -699,11 +698,11 @@ namespace AM_Annotator
                     }
                     if (reader.Name == "Annotation")
                     {
-                        ai.addLabel(Convert.ToInt32(reader.GetAttribute("Id")), Convert.ToInt32(reader.GetAttribute("X")),
+                        ai.AddLabel(Convert.ToInt32(reader.GetAttribute("Id")), Convert.ToInt32(reader.GetAttribute("X")),
                             Convert.ToInt32(reader.GetAttribute("Y")), Convert.ToInt32(reader.GetAttribute("Width")),
                             Convert.ToInt32(reader.GetAttribute("Height")));
-                        var s1 = ai.getFileName();
-                        var s2 = ai.getParentFolder();
+                        var s1 = ai.GetFileName();
+                        var s2 = ai.GetParentFolder();
                         
                     }
                     if (newAnnotationImage)
@@ -732,6 +731,46 @@ namespace AM_Annotator
                 //project_path += "*";
                 this.Text = project_path + "*";
             }
+        }
+
+
+        /***********************************************Build All Button************************************************/
+        private void buildAllBTN_Click(object sender, EventArgs e)
+        {
+            Form buildForm = new BuildForm(annotation_imgs, BUILD_LEVEL.BUILD_ALL);
+            buildForm.ShowDialog();
+        }
+        /***********************************************Build Button************************************************/
+        private void buildBTN_Click(object sender, EventArgs e)
+        {
+            bool buildPascal = Properties.Settings.Default.PascalVOCAnnotation;
+            bool buildOpencv = Properties.Settings.Default.OpencvAnnotation;
+            bool buildDarknet = Properties.Settings.Default.DarknetAnnotation;
+            if (buildPascal && buildOpencv && buildDarknet)
+            {
+                Form buildForm = new BuildForm(annotation_imgs, BUILD_LEVEL.BUILD_ALL);
+                buildForm.ShowDialog();
+            }
+            else if (buildPascal && !buildOpencv && !buildDarknet)
+            {
+                Form buildForm = new BuildForm(annotation_imgs, BUILD_LEVEL.BUILD_VOC_ONLY);
+                buildForm.ShowDialog();
+            }
+            else if (!buildPascal && buildOpencv && !buildDarknet)
+            {
+                Form buildForm = new BuildForm(annotation_imgs, BUILD_LEVEL.BUILD_OPENCV_ONLY);
+                buildForm.ShowDialog();
+            }
+            else if (!buildPascal && !buildOpencv && buildDarknet)
+            {
+                Form buildForm = new BuildForm(annotation_imgs, BUILD_LEVEL.BUILD_DARKNET_ONLY);
+                buildForm.ShowDialog();
+            }
+        }
+
+        private void projectBTN_Click(object sender, EventArgs e)
+        {
+            Process.Start(openProjectBTN.Text);
         }
     }
 }

@@ -75,7 +75,7 @@ namespace AM_Annotator
 
         private void setBTN_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.ProjectDirectory = outputDirectoryTB.Text.ToString();
+            Properties.Settings.Default.ProjectLocation = outputDirectoryTB.Text.ToString();
         }
     }
 }

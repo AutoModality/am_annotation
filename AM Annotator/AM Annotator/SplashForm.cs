@@ -19,6 +19,7 @@ namespace AM_Annotator
             this.StartPosition = FormStartPosition.Manual;
             this.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 4, Screen.PrimaryScreen.Bounds.Height / 4);
             this.BringToFront();
+            this.ShowInTaskbar = false;
 
             closeTimer.Start();
         }
@@ -26,6 +27,11 @@ namespace AM_Annotator
         {
             closeTimer.Stop();
             this.Close();
+        }
+
+        private void SplashForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

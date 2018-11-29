@@ -16,7 +16,7 @@ namespace AM_Annotator
         }
         public OpencvAnnotationFormat(string output_directory)
         {
-            output_directory_raw = output_directory + "\\opencv_annotation\\";
+            output_directory_raw = output_directory + "\\opencv_annotations\\";
             Directory.CreateDirectory(output_directory_raw);
         }
         public void Add(string image_location, FeatureLabel fl)
@@ -42,22 +42,25 @@ namespace AM_Annotator
         }
         public void Add(AnnotationImage ai)
         {
-            foreach (FeatureLabel fl in ai.getLabels())
+            foreach (FeatureLabel fl in ai.GetLabels())
             {
-                string potential_path = output_directory_raw + "class_" + fl.Id.ToString() + "//annotation.txt";
-                if (!File.Exists(potential_path))
+                string potential_path = output_directory_raw + "class_" + fl.Id.ToString();
+                Directory.CreateDirectory(potential_path);
+
+                string potential_file = potential_path + "\\annotation.txt";
+                if (!File.Exists(potential_file))
                 {
-                    using (System.IO.StreamWriter sw = new System.IO.StreamWriter(potential_path, false))
+                    using (System.IO.StreamWriter sw = new System.IO.StreamWriter(potential_file, false))
                     {
-                        string textToWrite = ai.getImageLocation() + " " + fl.X.ToString() + " " + fl.Y.ToString() + " " + fl.Width.ToString() + " " + fl.Height.ToString();
+                        string textToWrite = ai.GetImageLocation() + " " + fl.X.ToString() + " " + fl.Y.ToString() + " " + fl.Width.ToString() + " " + fl.Height.ToString();
                         sw.WriteLine(textToWrite);
                     }
                 }
                 else
                 {
-                    using (System.IO.StreamWriter sw = new System.IO.StreamWriter(potential_path, true))
+                    using (System.IO.StreamWriter sw = new System.IO.StreamWriter(potential_file, true))
                     {
-                        string textToWrite = ai.getImageLocation() + " " + fl.X.ToString() + " " + fl.Y.ToString() + " " + fl.Width.ToString() + " " + fl.Height.ToString();
+                        string textToWrite = ai.GetImageLocation() + " " + fl.X.ToString() + " " + fl.Y.ToString() + " " + fl.Width.ToString() + " " + fl.Height.ToString();
                         sw.WriteLine(textToWrite);
                     }
                 }

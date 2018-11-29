@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace AM_Annotator
 {
-    class FeatureLabel
+    public class FeatureLabel
     {
         private int _id;
         private int _x;

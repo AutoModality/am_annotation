@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainWindow));
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripDropDownButton2 = new System.Windows.Forms.ToolStripDropDownButton();
@@ -39,6 +40,9 @@
             this.toolStripDropDownButton3 = new System.Windows.Forms.ToolStripDropDownButton();
             this.annotatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripDropDownButton4 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.buildAllBTN = new System.Windows.Forms.ToolStripMenuItem();
+            this.buildBTN = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.loadBTN = new System.Windows.Forms.Button();
             this.removeBTN = new System.Windows.Forms.Button();
@@ -69,7 +73,9 @@
             this.viewAllAnnotationsBTN = new System.Windows.Forms.Button();
             this.deleteAnnotationBTN = new System.Windows.Forms.Button();
             this.currentImgAnnotationsLB = new System.Windows.Forms.ListBox();
-            this.saveWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openProjectBTN = new System.Windows.Forms.Button();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.loadImageProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -77,6 +83,7 @@
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainPB)).BeginInit();
             this.groupBox6.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStripDropDownButton1
@@ -98,6 +105,13 @@
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.fileToolStripMenuItem.Text = "New Workspace";
+            // 
+            // saveWorkspaceToolStripMenuItem
+            // 
+            this.saveWorkspaceToolStripMenuItem.Name = "saveWorkspaceToolStripMenuItem";
+            this.saveWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.saveWorkspaceToolStripMenuItem.Text = "Save Workspace";
+            this.saveWorkspaceToolStripMenuItem.Click += new System.EventHandler(this.saveWorkspaceToolStripMenuItem_Click);
             // 
             // newProjectToolStripMenuItem
             // 
@@ -136,7 +150,8 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripDropDownButton1,
             this.toolStripDropDownButton2,
-            this.toolStripDropDownButton3});
+            this.toolStripDropDownButton3,
+            this.toolStripDropDownButton4});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1172, 25);
@@ -168,6 +183,32 @@
             this.dataCollectionToolStripMenuItem.Text = "Data Collection";
             this.dataCollectionToolStripMenuItem.Click += new System.EventHandler(this.dataCollectionToolStripMenuItem_Click);
             // 
+            // toolStripDropDownButton4
+            // 
+            this.toolStripDropDownButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripDropDownButton4.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.buildAllBTN,
+            this.buildBTN});
+            this.toolStripDropDownButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton4.Image")));
+            this.toolStripDropDownButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton4.Name = "toolStripDropDownButton4";
+            this.toolStripDropDownButton4.Size = new System.Drawing.Size(47, 22);
+            this.toolStripDropDownButton4.Text = "Build";
+            // 
+            // buildAllBTN
+            // 
+            this.buildAllBTN.Name = "buildAllBTN";
+            this.buildAllBTN.Size = new System.Drawing.Size(118, 22);
+            this.buildAllBTN.Text = "Build All";
+            this.buildAllBTN.Click += new System.EventHandler(this.buildAllBTN_Click);
+            // 
+            // buildBTN
+            // 
+            this.buildBTN.Name = "buildBTN";
+            this.buildBTN.Size = new System.Drawing.Size(118, 22);
+            this.buildBTN.Text = "Build";
+            this.buildBTN.Click += new System.EventHandler(this.buildBTN_Click);
+            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.loadBTN);
@@ -175,7 +216,7 @@
             this.groupBox2.Controls.Add(this.folderLB);
             this.groupBox2.Location = new System.Drawing.Point(12, 35);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(209, 542);
+            this.groupBox2.Size = new System.Drawing.Size(219, 542);
             this.groupBox2.TabIndex = 12;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Folders";
@@ -185,7 +226,7 @@
             this.loadBTN.BackColor = System.Drawing.Color.Transparent;
             this.loadBTN.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("loadBTN.BackgroundImage")));
             this.loadBTN.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.loadBTN.Location = new System.Drawing.Point(6, 480);
+            this.loadBTN.Location = new System.Drawing.Point(6, 485);
             this.loadBTN.Name = "loadBTN";
             this.loadBTN.Size = new System.Drawing.Size(40, 40);
             this.loadBTN.TabIndex = 1;
@@ -196,7 +237,7 @@
             // 
             this.removeBTN.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("removeBTN.BackgroundImage")));
             this.removeBTN.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.removeBTN.Location = new System.Drawing.Point(157, 480);
+            this.removeBTN.Location = new System.Drawing.Point(173, 485);
             this.removeBTN.Name = "removeBTN";
             this.removeBTN.Size = new System.Drawing.Size(40, 40);
             this.removeBTN.TabIndex = 4;
@@ -205,11 +246,9 @@
             // 
             // folderLB
             // 
-            this.folderLB.FormattingEnabled = true;
             this.folderLB.Location = new System.Drawing.Point(6, 19);
             this.folderLB.Name = "folderLB";
-            this.folderLB.ScrollAlwaysVisible = true;
-            this.folderLB.Size = new System.Drawing.Size(190, 459);
+            this.folderLB.Size = new System.Drawing.Size(207, 459);
             this.folderLB.TabIndex = 2;
             this.folderLB.SelectedIndexChanged += new System.EventHandler(this.folderLB_SelectedIndexChanged);
             // 
@@ -237,7 +276,7 @@
             this.groupBox5.Controls.Add(this.label7);
             this.groupBox5.Controls.Add(this.label5);
             this.groupBox5.Controls.Add(this.label6);
-            this.groupBox5.Location = new System.Drawing.Point(678, 520);
+            this.groupBox5.Location = new System.Drawing.Point(693, 520);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(259, 58);
             this.groupBox5.TabIndex = 14;
@@ -358,7 +397,7 @@
             this.groupBox4.Controls.Add(this.cursorPositionXL);
             this.groupBox4.Controls.Add(this.label3);
             this.groupBox4.Controls.Add(this.label4);
-            this.groupBox4.Location = new System.Drawing.Point(502, 519);
+            this.groupBox4.Location = new System.Drawing.Point(517, 519);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(170, 58);
             this.groupBox4.TabIndex = 15;
@@ -405,7 +444,7 @@
             // 
             this.groupBox3.Controls.Add(this.imageLB);
             this.groupBox3.Controls.Add(this.imgRemoveBTN);
-            this.groupBox3.Location = new System.Drawing.Point(227, 35);
+            this.groupBox3.Location = new System.Drawing.Point(237, 35);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(269, 542);
             this.groupBox3.TabIndex = 13;
@@ -416,7 +455,7 @@
             // 
             this.imgRemoveBTN.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("imgRemoveBTN.BackgroundImage")));
             this.imgRemoveBTN.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.imgRemoveBTN.Location = new System.Drawing.Point(226, 480);
+            this.imgRemoveBTN.Location = new System.Drawing.Point(223, 485);
             this.imgRemoveBTN.Name = "imgRemoveBTN";
             this.imgRemoveBTN.Size = new System.Drawing.Size(40, 40);
             this.imgRemoveBTN.TabIndex = 6;
@@ -426,7 +465,7 @@
             // mainPB
             // 
             this.mainPB.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.mainPB.Location = new System.Drawing.Point(502, 34);
+            this.mainPB.Location = new System.Drawing.Point(515, 34);
             this.mainPB.Name = "mainPB";
             this.mainPB.Size = new System.Drawing.Size(640, 480);
             this.mainPB.TabIndex = 11;
@@ -441,7 +480,7 @@
             this.groupBox6.Controls.Add(this.viewAllAnnotationsBTN);
             this.groupBox6.Controls.Add(this.deleteAnnotationBTN);
             this.groupBox6.Controls.Add(this.currentImgAnnotationsLB);
-            this.groupBox6.Location = new System.Drawing.Point(502, 584);
+            this.groupBox6.Location = new System.Drawing.Point(518, 584);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(556, 141);
             this.groupBox6.TabIndex = 16;
@@ -476,18 +515,40 @@
             this.currentImgAnnotationsLB.Size = new System.Drawing.Size(401, 108);
             this.currentImgAnnotationsLB.TabIndex = 0;
             // 
-            // saveWorkspaceToolStripMenuItem
+            // openProjectBTN
             // 
-            this.saveWorkspaceToolStripMenuItem.Name = "saveWorkspaceToolStripMenuItem";
-            this.saveWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.saveWorkspaceToolStripMenuItem.Text = "Save Workspace";
-            this.saveWorkspaceToolStripMenuItem.Click += new System.EventHandler(this.saveWorkspaceToolStripMenuItem_Click);
+            this.openProjectBTN.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.openProjectBTN.Location = new System.Drawing.Point(12, 584);
+            this.openProjectBTN.Name = "openProjectBTN";
+            this.openProjectBTN.Size = new System.Drawing.Size(494, 141);
+            this.openProjectBTN.TabIndex = 17;
+            this.openProjectBTN.Text = "Project Location";
+            this.openProjectBTN.UseVisualStyleBackColor = true;
+            this.openProjectBTN.Click += new System.EventHandler(this.projectBTN_Click);
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.loadImageProgressBar});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 737);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(1172, 22);
+            this.statusStrip1.TabIndex = 18;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // loadImageProgressBar
+            // 
+            this.loadImageProgressBar.Name = "loadImageProgressBar";
+            this.loadImageProgressBar.Size = new System.Drawing.Size(200, 16);
+            this.loadImageProgressBar.Step = 1;
             // 
             // mainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1172, 759);
+            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.openProjectBTN);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
@@ -512,6 +573,8 @@
             this.groupBox3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.mainPB)).EndInit();
             this.groupBox6.ResumeLayout(false);
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -560,6 +623,12 @@
         private System.Windows.Forms.ToolStripMenuItem annotatorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem dataCollectionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveWorkspaceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton4;
+        private System.Windows.Forms.ToolStripMenuItem buildAllBTN;
+        private System.Windows.Forms.ToolStripMenuItem buildBTN;
+        private System.Windows.Forms.Button openProjectBTN;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripProgressBar loadImageProgressBar;
     }
 }
 

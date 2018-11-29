@@ -39,6 +39,8 @@ namespace AM_Annotator
 
         private void labelForm_Load(object sender, EventArgs e)
         {
+            this.BringToFront();
+            this.TopMost = true;
             idLabelTB.Select();
         }
     }

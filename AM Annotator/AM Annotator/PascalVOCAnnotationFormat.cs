@@ -18,23 +18,23 @@ namespace AM_Annotator
 
         public PascalVOCAnnotationFormat(string output_directory)
         {
-            output_directory_raw = output_directory + "\\pascalvoc_format";
+            output_directory_raw = output_directory + "\\pascalvoc_annoations";
             Directory.CreateDirectory(output_directory_raw);
         }
 
         public void Add(AnnotationImage ai)
         {
-            List<FeatureLabel> labels = ai.getLabels();
+            List<FeatureLabel> labels = ai.GetLabels();
             if (labels.Count == 0)
             {
                 return;
             }
 
             //Set the path to the file
-            string folder_path = output_directory_raw + "\\" + ai.getParentFolder();
+            string folder_path = output_directory_raw + "\\" + ai.GetParentFolder();
             Directory.CreateDirectory(folder_path);
 
-            string annotation_path = folder_path + "\\" + Path.GetFileNameWithoutExtension(ai.getFileName()) + ".xml";
+            string annotation_path = folder_path + "\\" + Path.GetFileNameWithoutExtension(ai.GetFileName()) + ".xml";
 
             //Setting up the xml writer setting
             XmlWriterSettings xws = new XmlWriterSettings();
@@ -49,18 +49,18 @@ namespace AM_Annotator
             writer.WriteStartDocument();
             writer.WriteStartElement("annotation");
 
-            writer.WriteElementString("folder", ai.getParentFolder());
-            writer.WriteElementString("filename", ai.getFileName());
-            writer.WriteElementString("path", ai.getImageLocation());
+            writer.WriteElementString("folder", ai.GetParentFolder());
+            writer.WriteElementString("filename", ai.GetFileName());
+            writer.WriteElementString("path", ai.GetImageLocation());
 
             writer.WriteStartElement("source");
             writer.WriteElementString("database", "Unknown");
             writer.WriteEndElement();
 
             writer.WriteStartElement("size");
-            writer.WriteElementString("width", Convert.ToString(ai.getWidth()));
-            writer.WriteElementString("height", Convert.ToString(ai.getHeight()));
-            writer.WriteElementString("depth", Convert.ToString(ai.getNumOfChannels()));
+            writer.WriteElementString("width", Convert.ToString(ai.GetWidth()));
+            writer.WriteElementString("height", Convert.ToString(ai.GetHeight()));
+            writer.WriteElementString("depth", Convert.ToString(ai.GetNumOfChannels()));
             writer.WriteEndElement();
 
             writer.WriteElementString("segmented", Convert.ToString(0));

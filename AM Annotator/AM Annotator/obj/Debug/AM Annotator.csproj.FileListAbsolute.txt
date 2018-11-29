@@ -120,3 +120,47 @@ C:\Users\alireza\Documents\workspace\am_annotation\AM Annotator\AM Annotator\obj
 C:\Users\alireza\Documents\workspace\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM Annotator.pdb
 C:\Users\alireza\Documents\workspace\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM Annotator.csprojAssemblyReference.cache
 C:\Users\alireza\Documents\workspace\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM_Annotator.SplashForm.resources
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\x64\concrt140.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\x64\cvextern.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\x64\msvcp140.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\x64\opencv_ffmpeg343_64.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\x64\vcruntime140.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\x86\concrt140.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\x86\cvextern.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\x86\msvcp140.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\x86\opencv_ffmpeg343.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\x86\vcruntime140.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\AM Annotator.exe.config
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\AM Annotator.exe
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\AM Annotator.pdb
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\Emgu.CV.UI.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\Emgu.CV.World.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\ZedGraph.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\Emgu.CV.UI.xml
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\Emgu.CV.World.xml
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\ZedGraph.xml
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\de\ZedGraph.resources.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\es\ZedGraph.resources.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\fr\ZedGraph.resources.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\hu\ZedGraph.resources.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\it\ZedGraph.resources.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\ja\ZedGraph.resources.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\pt\ZedGraph.resources.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\ru\ZedGraph.resources.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\sk\ZedGraph.resources.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\sv\ZedGraph.resources.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\tr\ZedGraph.resources.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\zh-cn\ZedGraph.resources.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\zh-tw\ZedGraph.resources.dll
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM Annotator.csprojAssemblyReference.cache
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM_Annotator.mainWindow.resources
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM_Annotator.labelForm.resources
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM_Annotator.Properties.Resources.resources
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM_Annotator.SettingForm.resources
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM_Annotator.SplashForm.resources
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM Annotator.csproj.GenerateResource.cache
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM Annotator.csproj.CoreCompileInputs.cache
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM Annotator.csproj.CopyComplete
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM Annotator.exe
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM Annotator.pdb
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM_Annotator.BuildForm.resources
