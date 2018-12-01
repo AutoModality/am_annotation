@@ -125,6 +125,7 @@
             // 
             this.outputDirectoryTB.Location = new System.Drawing.Point(90, 324);
             this.outputDirectoryTB.Name = "outputDirectoryTB";
+            this.outputDirectoryTB.ReadOnly = true;
             this.outputDirectoryTB.Size = new System.Drawing.Size(306, 20);
             this.outputDirectoryTB.TabIndex = 12;
             // 

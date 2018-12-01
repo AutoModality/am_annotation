@@ -29,6 +29,7 @@ namespace AM_Annotator
                 {
                     string textToWrite = image_location + " " + fl.X.ToString() + " " + fl.Y.ToString() + " " + fl.Width.ToString() + " " + fl.Height.ToString();
                     sw.WriteLine(textToWrite);
+                    sw.Close();
                 }
             }
             else
@@ -54,6 +55,7 @@ namespace AM_Annotator
                     {
                         string textToWrite = ai.GetImageLocation() + " " + fl.X.ToString() + " " + fl.Y.ToString() + " " + fl.Width.ToString() + " " + fl.Height.ToString();
                         sw.WriteLine(textToWrite);
+                        sw.Close();
                     }
                 }
                 else
@@ -62,6 +64,7 @@ namespace AM_Annotator
                     {
                         string textToWrite = ai.GetImageLocation() + " " + fl.X.ToString() + " " + fl.Y.ToString() + " " + fl.Width.ToString() + " " + fl.Height.ToString();
                         sw.WriteLine(textToWrite);
+                        sw.Close();
                     }
                 }
             }

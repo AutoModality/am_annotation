@@ -31,7 +31,7 @@ namespace AM_Annotator
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.Manual;
-            this.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 5, Screen.PrimaryScreen.Bounds.Height / 5);
+            this.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2);
             annotations = ai;
             build_level = build_lvl;
 
@@ -117,8 +117,11 @@ namespace AM_Annotator
                 oaf.Add(annotations[i]);
                 daf.Add(annotations[i]);
                 UpdateProgressBar((double)i * 100.0 / (double)annotations.Count);
-                Thread.Sleep(1);
+                //Thread.Sleep(1);
             }
+
+            daf.CreateTrainCollection(Properties.Settings.Default.TrainPercentage);
+            paf.CreateTrainCollection(Properties.Settings.Default.TrainPercentage);
             UpdateProgressBar(100.0);
             CloseForm();
         }

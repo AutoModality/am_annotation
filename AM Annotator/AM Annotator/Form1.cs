@@ -21,9 +21,7 @@ namespace AM_Annotator
     {
         Mat selected_img = new Mat();
 
-        private List<string> project_directory_list = new List<string>();
         private List<string> supported_img_format = new List<string>{ "jpg", "jpeg", "png", "gif", "tiff", "bmp" };
-        private List<string> current_directory_img_list = new List<string>();
         private List<AnnotationImage> annotation_imgs = new List<AnnotationImage>();
         private AnnotationImage selected_annotation_img = new AnnotationImage();
         private FeatureLabel current_annotation = new FeatureLabel();
@@ -46,16 +44,26 @@ namespace AM_Annotator
         private bool multi_annotation_view = false;
         private bool mouseIsDown = false;
 
-
-        public mainWindow()
+        private Thread SplashThread;
+        public mainWindow(bool runSplash = true)
         {
-            Thread t = new Thread(new ThreadStart(StartSplash));
-            t.Start();
-            Thread.Sleep(5000);
 
+            if (runSplash)
+            {
+                SplashThread = new Thread(new ThreadStart(StartSplash));
+                SplashThread.Start();
+                Thread.Sleep(5000);
+            }
+            else
+            {
+                Properties.Settings.Default.Reset();
+            }
             InitializeComponent();
 
-            t.Abort(); 
+            if (runSplash)
+            {
+                SplashThread.Abort();
+            }
         }
 
         public void StartSplash()
@@ -69,11 +77,11 @@ namespace AM_Annotator
             this.StartPosition = FormStartPosition.Manual;
             this.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 5, Screen.PrimaryScreen.Bounds.Height / 5);
             this.BringToFront();
-            this.TopMost = true;
+            //this.TopMost = true;
 
-            Properties.Settings.Default.ProjectLocation = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Annotator\\" + DateTime.Now.ToString("MM.dd.yyyy") + "_" + DateTime.Now.ToString("HH-mm");
-            Directory.CreateDirectory(Properties.Settings.Default.ProjectLocation);
-            openProjectBTN.Text = Properties.Settings.Default.ProjectLocation;
+            //Properties.Settings.Default.ProjectLocation = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Annotator\\" + DateTime.Now.ToString("MM.dd.yyyy") + "_" + DateTime.Now.ToString("HH-mm");
+            //Directory.CreateDirectory(Properties.Settings.Default.ProjectLocation);
+            //openProjectBTN.Text = Properties.Settings.Default.ProjectLocation;
             this.Text = project_path;
         }
 
@@ -93,20 +101,16 @@ namespace AM_Annotator
             {
                 
                 /*if the directory is not added already*/
-                if (!project_directory_list.Contains(openDir.SelectedPath))
+                if (!annotation_imgs.Any(x => x.GetParentPath() == openDir.SelectedPath))
                 {
                     /*If it contains any image*/
                     if (loadImages(openDir.SelectedPath) > 0)
                     {
                         last_openned_directory = openDir.SelectedPath;
-                        project_directory_list.Add(last_openned_directory);
                         updateFolderListBox();
                         folderLB.SelectedIndex = 0;
                         AlertUnsavedProject(false);
                     }
-                    
-
-                    
                 }
             }
         }
@@ -138,17 +142,37 @@ namespace AM_Annotator
         private void updateFolderListBox()
         {
             folderLB.Items.Clear();
-            foreach (string s in project_directory_list)
+            foreach (AnnotationImage ai in annotation_imgs)
             {
-                folderLB.Items.Add(s);
+                if (!folderLB.Items.Contains(ai.GetParentPath()))
+                {
+                    folderLB.Items.Add(ai.GetParentPath());
+                }
             }
+            
         }
-        private void updateImgListBox()
+
+        /// <summary>
+        /// Given s parent folder, this routine looks into the annotation_imgs and list them in the imageLB
+        /// if they have the same parent folder
+        /// </summary>
+        /// <param name="parent_folder">string that indicates the target parent folder</param>
+        private void updateImgListBox(string parent_folder)
         {
+            //Clear the imageLB item
             imageLB.Items.Clear();
-            foreach (string s in current_directory_img_list)
+            /*foreach (string s in current_directory_img_list)
             {
                 imageLB.Items.Add(s);
+            }*/
+            //Iterating through the annotation_imgs
+            foreach (AnnotationImage ai in annotation_imgs)
+            {
+                string parent = ai.GetParentPath();
+                if (parent == parent_folder)
+                {
+                    imageLB.Items.Add(ai.GetFileName());
+                }
             }
         }
         /*folderLB item selection event*/
@@ -158,13 +182,9 @@ namespace AM_Annotator
             try
             {
                 string selected_directory = folderLB.SelectedItem.ToString();
-                current_directory_img_list.Clear();
-                foreach (string img_format in supported_img_format)
-                {
-                    current_directory_img_list.AddRange(Directory.GetFiles(selected_directory, "*." + img_format, SearchOption.TopDirectoryOnly));
-                }
+                
 
-                updateImgListBox();
+                updateImgListBox(folderLB.SelectedItem.ToString());
                 if (imageLB.Items.Count > 0)
                 {
                     imageLB.SelectedIndex = 0;
@@ -185,9 +205,12 @@ namespace AM_Annotator
         {
             try
             {
+                //Form the string related to image location
+                string image_path = folderLB.SelectedItem.ToString() + "\\" + imageLB.SelectedItem.ToString();
+
                 /*getting the image based on the selected item text*/
                 //selected_annotation_img = getImage(imageLB.SelectedItem.ToString());
-                selected_annotation_index = getImageIndex(imageLB.SelectedItem.ToString());
+                selected_annotation_index = getImageIndex(image_path);
 
                 /*loading and resizing the image*/
                 selected_img = annotation_imgs[selected_annotation_index].GetMat();
@@ -229,7 +252,9 @@ namespace AM_Annotator
                 string selected_directory = folderLB.SelectedItem.ToString();
                 if (selected_directory != "")
                 {
-                    project_directory_list.Remove(selected_directory);
+                    //Selecting the ImageAnnotation objects whose parent paths are not the same as the selected directory
+                    annotation_imgs = annotation_imgs.Where(x => x.GetParentPath() != selected_directory).ToList();
+                    
                     updateFolderListBox();
                     imageLB.Items.Clear();
                    
@@ -737,12 +762,20 @@ namespace AM_Annotator
         /***********************************************Build All Button************************************************/
         private void buildAllBTN_Click(object sender, EventArgs e)
         {
+            if (Properties.Settings.Default.ProjectLocation == "")
+            {
+                MessageBox.Show("Please set the annotation folder in Edit -> Preferences.", "Unable to Build",  MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
             Form buildForm = new BuildForm(annotation_imgs, BUILD_LEVEL.BUILD_ALL);
             buildForm.ShowDialog();
         }
         /***********************************************Build Button************************************************/
         private void buildBTN_Click(object sender, EventArgs e)
         {
+            if (Properties.Settings.Default.ProjectLocation == "")
+            {
+                MessageBox.Show("Please set the annotation folder in Edit -> Preferences.", "Unable to Build", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
             bool buildPascal = Properties.Settings.Default.PascalVOCAnnotation;
             bool buildOpencv = Properties.Settings.Default.OpencvAnnotation;
             bool buildDarknet = Properties.Settings.Default.DarknetAnnotation;
@@ -770,7 +803,25 @@ namespace AM_Annotator
 
         private void projectBTN_Click(object sender, EventArgs e)
         {
-            Process.Start(openProjectBTN.Text);
+            if (Properties.Settings.Default.ProjectLocation == "")
+            {
+                return;
+            }
+            Process.Start(Properties.Settings.Default.ProjectLocation);
+        }
+
+        private void startApp()
+        {
+            Application.Run(new mainWindow(false));
+        }
+
+        private void newWorkspaceBTN_Click(object sender, EventArgs e)
+        {
+            System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(startApp));
+            t.SetApartmentState(System.Threading.ApartmentState.STA);
+            t.Start();
+            this.Close();
+           
         }
     }
 }

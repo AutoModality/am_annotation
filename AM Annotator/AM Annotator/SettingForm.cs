@@ -75,7 +75,13 @@ namespace AM_Annotator
 
         private void setBTN_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.ProjectLocation = outputDirectoryTB.Text.ToString();
+            FolderBrowserDialog openDir = new FolderBrowserDialog();
+            if (openDir.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(openDir.SelectedPath))
+            {
+                outputDirectoryTB.Text = openDir.SelectedPath;
+                Properties.Settings.Default.ProjectLocation = openDir.SelectedPath;
+            }
+            
         }
     }
 }

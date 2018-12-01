@@ -30,7 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainWindow));
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newWorkspaceBTN = new System.Windows.Forms.ToolStripMenuItem();
             this.saveWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -90,7 +90,7 @@
             // 
             this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
+            this.newWorkspaceBTN,
             this.saveWorkspaceToolStripMenuItem,
             this.newProjectToolStripMenuItem,
             this.exitToolStripMenuItem});
@@ -100,30 +100,31 @@
             this.toolStripDropDownButton1.Size = new System.Drawing.Size(38, 22);
             this.toolStripDropDownButton1.Text = "File";
             // 
-            // fileToolStripMenuItem
+            // newWorkspaceBTN
             // 
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.fileToolStripMenuItem.Text = "New Workspace";
+            this.newWorkspaceBTN.Name = "newWorkspaceBTN";
+            this.newWorkspaceBTN.Size = new System.Drawing.Size(180, 22);
+            this.newWorkspaceBTN.Text = "New Workspace";
+            this.newWorkspaceBTN.Click += new System.EventHandler(this.newWorkspaceBTN_Click);
             // 
             // saveWorkspaceToolStripMenuItem
             // 
             this.saveWorkspaceToolStripMenuItem.Name = "saveWorkspaceToolStripMenuItem";
-            this.saveWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.saveWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveWorkspaceToolStripMenuItem.Text = "Save Workspace";
             this.saveWorkspaceToolStripMenuItem.Click += new System.EventHandler(this.saveWorkspaceToolStripMenuItem_Click);
             // 
             // newProjectToolStripMenuItem
             // 
             this.newProjectToolStripMenuItem.Name = "newProjectToolStripMenuItem";
-            this.newProjectToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.newProjectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.newProjectToolStripMenuItem.Text = "Load Workspace";
             this.newProjectToolStripMenuItem.Click += new System.EventHandler(this.newProjectToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -141,7 +142,7 @@
             // preferencesToolStripMenuItem
             // 
             this.preferencesToolStripMenuItem.Name = "preferencesToolStripMenuItem";
-            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.preferencesToolStripMenuItem.Text = "Preferences";
             this.preferencesToolStripMenuItem.Click += new System.EventHandler(this.preferencesToolStripMenuItem_Click);
             // 
@@ -173,13 +174,13 @@
             // annotatorToolStripMenuItem
             // 
             this.annotatorToolStripMenuItem.Name = "annotatorToolStripMenuItem";
-            this.annotatorToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.annotatorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.annotatorToolStripMenuItem.Text = "Annotator";
             // 
             // dataCollectionToolStripMenuItem
             // 
             this.dataCollectionToolStripMenuItem.Name = "dataCollectionToolStripMenuItem";
-            this.dataCollectionToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.dataCollectionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.dataCollectionToolStripMenuItem.Text = "Data Collection";
             this.dataCollectionToolStripMenuItem.Click += new System.EventHandler(this.dataCollectionToolStripMenuItem_Click);
             // 
@@ -198,14 +199,14 @@
             // buildAllBTN
             // 
             this.buildAllBTN.Name = "buildAllBTN";
-            this.buildAllBTN.Size = new System.Drawing.Size(118, 22);
+            this.buildAllBTN.Size = new System.Drawing.Size(180, 22);
             this.buildAllBTN.Text = "Build All";
             this.buildAllBTN.Click += new System.EventHandler(this.buildAllBTN_Click);
             // 
             // buildBTN
             // 
             this.buildBTN.Name = "buildBTN";
-            this.buildBTN.Size = new System.Drawing.Size(118, 22);
+            this.buildBTN.Size = new System.Drawing.Size(180, 22);
             this.buildBTN.Text = "Build";
             this.buildBTN.Click += new System.EventHandler(this.buildBTN_Click);
             // 
@@ -520,9 +521,9 @@
             this.openProjectBTN.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.openProjectBTN.Location = new System.Drawing.Point(12, 584);
             this.openProjectBTN.Name = "openProjectBTN";
-            this.openProjectBTN.Size = new System.Drawing.Size(494, 141);
+            this.openProjectBTN.Size = new System.Drawing.Size(219, 55);
             this.openProjectBTN.TabIndex = 17;
-            this.openProjectBTN.Text = "Project Location";
+            this.openProjectBTN.Text = "Open Annotation Location";
             this.openProjectBTN.UseVisualStyleBackColor = true;
             this.openProjectBTN.Click += new System.EventHandler(this.projectBTN_Click);
             // 
@@ -583,7 +584,7 @@
         #endregion
 
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem newWorkspaceBTN;
         private System.Windows.Forms.ToolStripMenuItem newProjectToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton2;

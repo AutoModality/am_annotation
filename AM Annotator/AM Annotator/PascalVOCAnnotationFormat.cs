@@ -11,7 +11,7 @@ namespace AM_Annotator
     class PascalVOCAnnotationFormat
     {
         private string output_directory_raw;
-
+        private List<AnnotationImage> annotation_images = new List<AnnotationImage>();
         public PascalVOCAnnotationFormat()
         {
         }
@@ -22,6 +22,47 @@ namespace AM_Annotator
             Directory.CreateDirectory(output_directory_raw);
         }
 
+        //A public method to create train and test images
+        public void CreateTrainCollection(double train_percentage)
+        {
+            //Setting the train and test file location
+            string test_file_location = output_directory_raw + "\\test.txt";
+            string train_file_location = output_directory_raw + "\\train.txt";
+
+            List<string> trainList = new List<string>();
+            int nTrainingImgs = (int)(annotation_images.Count * train_percentage * 0.01);
+            Random random = new Random();
+            //Iterating through the train list
+            while (trainList.Count < nTrainingImgs)
+            {
+
+                int index = random.Next(0, annotation_images.Count - 1);
+                if (!trainList.Contains(annotation_images[index].GetImageLocation()))
+                {
+                    trainList.Add(annotation_images[index].GetImageLocation());
+                    //Write it to the train file
+                    using (System.IO.StreamWriter sw = new System.IO.StreamWriter(train_file_location, true))
+                    {
+                        sw.WriteLine(annotation_images[index].GetImageLocation());
+                        sw.Close();
+                    }
+                }
+            }
+            //Setting up the train 
+            foreach (AnnotationImage ai in annotation_images)
+            {
+                if (!trainList.Contains(ai.GetImageLocation()))
+                {
+                    //Write it to the train file
+                    using (System.IO.StreamWriter sw = new System.IO.StreamWriter(test_file_location, true))
+                    {
+                        sw.WriteLine(ai.GetImageLocation());
+                        sw.Close();
+                    }
+                }
+            }
+        }
+
         public void Add(AnnotationImage ai)
         {
             List<FeatureLabel> labels = ai.GetLabels();
@@ -30,6 +71,8 @@ namespace AM_Annotator
                 return;
             }
 
+            annotation_images.Add(ai);
+            
             //Set the path to the file
             string folder_path = output_directory_raw + "\\" + ai.GetParentFolder();
             Directory.CreateDirectory(folder_path);

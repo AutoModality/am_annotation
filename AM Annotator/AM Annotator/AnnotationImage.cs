@@ -122,8 +122,8 @@ namespace AM_Annotator
             List<string> annotation_str = new List<string>();
             foreach (FeatureLabel label in labels)
             {
-                annotation_str.Add(label.Id.ToString() + " " + Convert.ToInt32(label.X / width).ToString() + " " + Convert.ToInt32(label.Y / height).ToString()
-                    + " " + Convert.ToInt32(label.Width / width).ToString() + " " + Convert.ToInt32(label.Height / height));
+                annotation_str.Add(label.Id.ToString() + " " + ((double)label.X / (double)width).ToString() + " " + ((double)label.Y / (double)height).ToString()
+                    + " " + ((double)label.Width / (double)width).ToString() + " " + ((double)label.Height / (double)height));
             }
 
             return annotation_str;
@@ -135,9 +135,17 @@ namespace AM_Annotator
             return Convert.ToString(Directory.GetParent(img_location).Name);
             //return Path.GetPathRoot(img_location);
         }
+        public string GetParentPath()
+        {
+            return Convert.ToString(Directory.GetParent(img_location).ToString());
+        }
         public string GetFileName()
         {
             return Path.GetFileName(img_location);
+        }
+        public string GetStem()
+        {
+            return Path.GetFileNameWithoutExtension(img_location);
         }
         public int GetWidth()
         {
