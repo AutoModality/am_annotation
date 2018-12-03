@@ -37,8 +37,8 @@
             this.toolStripDropDownButton2 = new System.Windows.Forms.ToolStripDropDownButton();
             this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripDropDownButton3 = new System.Windows.Forms.ToolStripDropDownButton();
-            this.annotatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.projectToolBarBTN = new System.Windows.Forms.ToolStripDropDownButton();
+            this.annotatorProjectBTN = new System.Windows.Forms.ToolStripMenuItem();
             this.dataCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripDropDownButton4 = new System.Windows.Forms.ToolStripDropDownButton();
             this.buildAllBTN = new System.Windows.Forms.ToolStripMenuItem();
@@ -103,28 +103,28 @@
             // newWorkspaceBTN
             // 
             this.newWorkspaceBTN.Name = "newWorkspaceBTN";
-            this.newWorkspaceBTN.Size = new System.Drawing.Size(180, 22);
+            this.newWorkspaceBTN.Size = new System.Drawing.Size(161, 22);
             this.newWorkspaceBTN.Text = "New Workspace";
             this.newWorkspaceBTN.Click += new System.EventHandler(this.newWorkspaceBTN_Click);
             // 
             // saveWorkspaceToolStripMenuItem
             // 
             this.saveWorkspaceToolStripMenuItem.Name = "saveWorkspaceToolStripMenuItem";
-            this.saveWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.saveWorkspaceToolStripMenuItem.Text = "Save Workspace";
             this.saveWorkspaceToolStripMenuItem.Click += new System.EventHandler(this.saveWorkspaceToolStripMenuItem_Click);
             // 
             // newProjectToolStripMenuItem
             // 
             this.newProjectToolStripMenuItem.Name = "newProjectToolStripMenuItem";
-            this.newProjectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newProjectToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.newProjectToolStripMenuItem.Text = "Load Workspace";
             this.newProjectToolStripMenuItem.Click += new System.EventHandler(this.newProjectToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -142,7 +142,7 @@
             // preferencesToolStripMenuItem
             // 
             this.preferencesToolStripMenuItem.Name = "preferencesToolStripMenuItem";
-            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.preferencesToolStripMenuItem.Text = "Preferences";
             this.preferencesToolStripMenuItem.Click += new System.EventHandler(this.preferencesToolStripMenuItem_Click);
             // 
@@ -151,7 +151,7 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripDropDownButton1,
             this.toolStripDropDownButton2,
-            this.toolStripDropDownButton3,
+            this.projectToolBarBTN,
             this.toolStripDropDownButton4});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
@@ -159,28 +159,28 @@
             this.toolStrip1.TabIndex = 4;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // toolStripDropDownButton3
+            // projectToolBarBTN
             // 
-            this.toolStripDropDownButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripDropDownButton3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.annotatorToolStripMenuItem,
+            this.projectToolBarBTN.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.projectToolBarBTN.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.annotatorProjectBTN,
             this.dataCollectionToolStripMenuItem});
-            this.toolStripDropDownButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton3.Image")));
-            this.toolStripDropDownButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripDropDownButton3.Name = "toolStripDropDownButton3";
-            this.toolStripDropDownButton3.Size = new System.Drawing.Size(62, 22);
-            this.toolStripDropDownButton3.Text = "Projects";
+            this.projectToolBarBTN.Image = ((System.Drawing.Image)(resources.GetObject("projectToolBarBTN.Image")));
+            this.projectToolBarBTN.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.projectToolBarBTN.Name = "projectToolBarBTN";
+            this.projectToolBarBTN.Size = new System.Drawing.Size(62, 22);
+            this.projectToolBarBTN.Text = "Projects";
             // 
-            // annotatorToolStripMenuItem
+            // annotatorProjectBTN
             // 
-            this.annotatorToolStripMenuItem.Name = "annotatorToolStripMenuItem";
-            this.annotatorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.annotatorToolStripMenuItem.Text = "Annotator";
+            this.annotatorProjectBTN.Name = "annotatorProjectBTN";
+            this.annotatorProjectBTN.Size = new System.Drawing.Size(155, 22);
+            this.annotatorProjectBTN.Text = "Annotator";
             // 
             // dataCollectionToolStripMenuItem
             // 
             this.dataCollectionToolStripMenuItem.Name = "dataCollectionToolStripMenuItem";
-            this.dataCollectionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.dataCollectionToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.dataCollectionToolStripMenuItem.Text = "Data Collection";
             this.dataCollectionToolStripMenuItem.Click += new System.EventHandler(this.dataCollectionToolStripMenuItem_Click);
             // 
@@ -199,14 +199,14 @@
             // buildAllBTN
             // 
             this.buildAllBTN.Name = "buildAllBTN";
-            this.buildAllBTN.Size = new System.Drawing.Size(180, 22);
+            this.buildAllBTN.Size = new System.Drawing.Size(118, 22);
             this.buildAllBTN.Text = "Build All";
             this.buildAllBTN.Click += new System.EventHandler(this.buildAllBTN_Click);
             // 
             // buildBTN
             // 
             this.buildBTN.Name = "buildBTN";
-            this.buildBTN.Size = new System.Drawing.Size(180, 22);
+            this.buildBTN.Size = new System.Drawing.Size(118, 22);
             this.buildBTN.Text = "Build";
             this.buildBTN.Click += new System.EventHandler(this.buildBTN_Click);
             // 
@@ -620,8 +620,8 @@
         private System.Windows.Forms.Button viewAllAnnotationsBTN;
         private System.Windows.Forms.Button deleteAnnotationBTN;
         private System.Windows.Forms.ListBox currentImgAnnotationsLB;
-        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton3;
-        private System.Windows.Forms.ToolStripMenuItem annotatorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripDropDownButton projectToolBarBTN;
+        private System.Windows.Forms.ToolStripMenuItem annotatorProjectBTN;
         private System.Windows.Forms.ToolStripMenuItem dataCollectionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveWorkspaceToolStripMenuItem;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton4;

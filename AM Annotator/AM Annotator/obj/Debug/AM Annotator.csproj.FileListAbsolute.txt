@@ -76,7 +76,6 @@ C:\Users\Nanaj\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\De
 C:\Users\Nanaj\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\zh-tw\ZedGraph.resources.dll
 C:\Users\Nanaj\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM_Annotator.labelForm.resources
 C:\Users\Nanaj\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM_Annotator.SettingForm.resources
-C:\Users\Nanaj\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM_Annotator.splash.resources
 C:\Users\alireza\Documents\workspace\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM_Annotator.mainWindow.resources
 C:\Users\alireza\Documents\workspace\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM_Annotator.labelForm.resources
 C:\Users\alireza\Documents\workspace\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM_Annotator.Properties.Resources.resources
@@ -164,3 +163,6 @@ C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\
 C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM Annotator.exe
 C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM Annotator.pdb
 C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM_Annotator.BuildForm.resources
+C:\Users\Nanaj\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM_Annotator.BuildForm.resources
+C:\Users\Nanaj\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM_Annotator.SplashForm.resources
+C:\Users\Nanaj\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM_Annotator.DataCollectionForm.resources

@@ -83,6 +83,8 @@ namespace AM_Annotator
             //Directory.CreateDirectory(Properties.Settings.Default.ProjectLocation);
             //openProjectBTN.Text = Properties.Settings.Default.ProjectLocation;
             this.Text = project_path;
+
+            annotatorProjectBTN.Enabled = false;
         }
 
         /********************************This is where the load button is pressed*******************************/
@@ -574,9 +576,17 @@ namespace AM_Annotator
             settingForm.ShowDialog();
         }
 
+        /***********************************Starting the Data Collection App***********************************/
+        private void StartDataCollection()
+        {
+            Application.Run(new DataCollectionForm());
+        }
         private void dataCollectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(StartDataCollection));
+            t.SetApartmentState(System.Threading.ApartmentState.STA);
+            t.Start();
+            this.Close();
         }
 
         /************************************Saving The Entire Workspace when saveWorkspaceToolStripMenuItem is clicked***********************************/
@@ -810,14 +820,14 @@ namespace AM_Annotator
             Process.Start(Properties.Settings.Default.ProjectLocation);
         }
 
-        private void startApp()
+        private void StartMainWindow()
         {
             Application.Run(new mainWindow(false));
         }
 
         private void newWorkspaceBTN_Click(object sender, EventArgs e)
         {
-            System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(startApp));
+            System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(StartMainWindow));
             t.SetApartmentState(System.Threading.ApartmentState.STA);
             t.Start();
             this.Close();
