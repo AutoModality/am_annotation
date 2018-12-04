@@ -40,6 +40,8 @@
             this.yoloFormatCB = new System.Windows.Forms.CheckBox();
             this.cascadeFormatCB = new System.Windows.Forms.CheckBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label3 = new System.Windows.Forms.Label();
+            this.aliasTB = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.preferencesTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trainPercentageNUD)).BeginInit();
@@ -63,6 +65,8 @@
             // 
             // preferencesTabPage
             // 
+            this.preferencesTabPage.Controls.Add(this.aliasTB);
+            this.preferencesTabPage.Controls.Add(this.label3);
             this.preferencesTabPage.Controls.Add(this.label2);
             this.preferencesTabPage.Controls.Add(this.trainPercentageNUD);
             this.preferencesTabPage.Controls.Add(this.setBTN);
@@ -82,7 +86,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 291);
+            this.label2.Location = new System.Drawing.Point(6, 107);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(92, 13);
             this.label2.TabIndex = 15;
@@ -90,7 +94,7 @@
             // 
             // trainPercentageNUD
             // 
-            this.trainPercentageNUD.Location = new System.Drawing.Point(104, 289);
+            this.trainPercentageNUD.Location = new System.Drawing.Point(104, 105);
             this.trainPercentageNUD.Maximum = new decimal(new int[] {
             95,
             0,
@@ -113,17 +117,17 @@
             // 
             // setBTN
             // 
-            this.setBTN.Location = new System.Drawing.Point(402, 321);
+            this.setBTN.Location = new System.Drawing.Point(402, 138);
             this.setBTN.Name = "setBTN";
             this.setBTN.Size = new System.Drawing.Size(56, 23);
             this.setBTN.TabIndex = 13;
-            this.setBTN.Text = "Set";
+            this.setBTN.Text = "Browse";
             this.setBTN.UseVisualStyleBackColor = true;
             this.setBTN.Click += new System.EventHandler(this.setBTN_Click);
             // 
             // outputDirectoryTB
             // 
-            this.outputDirectoryTB.Location = new System.Drawing.Point(90, 324);
+            this.outputDirectoryTB.Location = new System.Drawing.Point(90, 140);
             this.outputDirectoryTB.Name = "outputDirectoryTB";
             this.outputDirectoryTB.ReadOnly = true;
             this.outputDirectoryTB.Size = new System.Drawing.Size(306, 20);
@@ -132,7 +136,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 327);
+            this.label1.Location = new System.Drawing.Point(6, 143);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(87, 13);
             this.label1.TabIndex = 11;
@@ -186,6 +190,23 @@
             this.tabPage2.Text = "Data Collection";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(14, 175);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(77, 13);
+            this.label3.TabIndex = 16;
+            this.label3.Text = "Alias Directory:";
+            // 
+            // aliasTB
+            // 
+            this.aliasTB.Location = new System.Drawing.Point(90, 172);
+            this.aliasTB.Name = "aliasTB";
+            this.aliasTB.Size = new System.Drawing.Size(306, 20);
+            this.aliasTB.TabIndex = 17;
+            this.aliasTB.MouseHover += new System.EventHandler(this.aliasTB_MouseHover);
+            // 
             // SettingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -217,5 +238,7 @@
         private System.Windows.Forms.CheckBox yoloFormatCB;
         private System.Windows.Forms.CheckBox cascadeFormatCB;
         private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TextBox aliasTB;
+        private System.Windows.Forms.Label label3;
     }
 }

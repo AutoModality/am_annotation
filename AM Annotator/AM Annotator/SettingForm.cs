@@ -83,5 +83,13 @@ namespace AM_Annotator
             }
             
         }
+
+        private void aliasTB_MouseHover(object sender, EventArgs e)
+        {
+            ToolTip tip = new ToolTip();
+            //tip.ToolTipTitle = "Alias Directory";
+            //tip.Show("Path to the images in the training machine", this, 10);
+            tip.SetToolTip(aliasTB, "Path to the images in the training machine. e.g. /home/ubuntu/image_set/images");
+        }
     }
 }
