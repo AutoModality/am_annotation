@@ -19,7 +19,10 @@ namespace AM_Annotator
 {
     public partial class mainWindow : Form
     {
+        Emgu.CV.Tracking.TrackerBoosting csrt_tracker = new Emgu.CV.Tracking.TrackerBoosting();
+
         Thread auto_save_thread;
+
         Mat selected_img = new Mat();
 
         private List<string> supported_img_format = new List<string>{ "jpg", "jpeg", "png", "gif", "tiff", "bmp" };
@@ -45,6 +48,7 @@ namespace AM_Annotator
         private bool annotation_selected = false;
         private bool multi_annotation_view = false;
         private bool mouseIsDown = false;
+        private bool use_tracker = false;
 
         private Thread SplashThread;
         public mainWindow(bool runSplash = true)
@@ -270,6 +274,13 @@ namespace AM_Annotator
                 Image<Bgr, Byte> my_image = selected_img.ToImage<Bgr, byte>();
                 mainPB.Image = my_image.ToBitmap();
 
+                if (use_tracker && annotation_imgs[selected_annotation_index].GetLabels().Count == 0)
+                {
+                    Rectangle roi = new Rectangle();
+                    csrt_tracker.Update(selected_img, out roi);
+                    annotation_imgs[selected_annotation_index].AddLabel(0, roi.X, roi.Y, roi.Width, roi.Height);
+                }
+
                 /*updating the annotation ListBox*/
                 updateAnnotationLB();
             }
@@ -414,6 +425,7 @@ namespace AM_Annotator
                     viewAllAnnotationsBTN.PerformClick();
                     //currentImgAnnotationsLB.Items.Add(annotation_imgs[selected_annotation_index].ToString());
                     AlertUnsavedProject(false);
+                    csrt_tracker.Init(annotation_imgs[selected_annotation_index].GetMat(), new Rectangle(x, y, width, height));
                 }
             }
             catch (Exception ex)
@@ -908,11 +920,9 @@ namespace AM_Annotator
 
         private void useTrackerCB_CheckedChanged(object sender, EventArgs e)
         {
-            //if it is activated
-            if (useTrackerCB.Checked)
-            {
+            use_tracker = useTrackerCB.Checked;
 
-            }
+
         }
     }
 }
