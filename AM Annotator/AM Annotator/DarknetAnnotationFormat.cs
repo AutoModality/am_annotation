@@ -18,12 +18,14 @@ namespace AM_Annotator
     class DarknetAnnotationFormat
     {
         private string darknet_path = "";
+        private string alias_directory = "";
         private List<AnnotationImage> annotation_images = new List<AnnotationImage>();
 
         //Constructor
-        public DarknetAnnotationFormat(string project_path)
+        public DarknetAnnotationFormat(string project_path, string alias_dir = "")
         {
             darknet_path = project_path + "\\darknet_annotations";
+            alias_directory = alias_dir;
             try
             {
                 Directory.CreateDirectory(darknet_path);

@@ -91,5 +91,10 @@ namespace AM_Annotator
             //tip.Show("Path to the images in the training machine", this, 10);
             tip.SetToolTip(aliasTB, "Path to the images in the training machine. e.g. /home/ubuntu/image_set/images");
         }
+
+        private void SettingForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Properties.Settings.Default.OutputAlias = aliasTB.Text;
+        }
     }
 }

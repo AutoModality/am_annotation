@@ -12,13 +12,15 @@ namespace AM_Annotator
     {
         private string output_directory_raw;
         private List<AnnotationImage> annotation_images = new List<AnnotationImage>();
+        private string alias_directory = "";
         public PascalVOCAnnotationFormat()
         {
         }
 
-        public PascalVOCAnnotationFormat(string output_directory)
+        public PascalVOCAnnotationFormat(string output_directory, string alias_dir = "")
         {
             output_directory_raw = output_directory + "\\pascalvoc_annoations";
+            alias_directory = alias_dir;
             Directory.CreateDirectory(output_directory_raw);
         }
 

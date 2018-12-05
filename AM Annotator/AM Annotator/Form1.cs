@@ -19,6 +19,7 @@ namespace AM_Annotator
 {
     public partial class mainWindow : Form
     {
+        Thread auto_save_thread;
         Mat selected_img = new Mat();
 
         private List<string> supported_img_format = new List<string>{ "jpg", "jpeg", "png", "gif", "tiff", "bmp" };
@@ -32,6 +33,7 @@ namespace AM_Annotator
         private string last_openned_directory = @"C:\";
         private string output_directory = @"C:\";
         private string project_path = "Untitled";
+        private string temp_workspace = "";
 
         private double annotation_padding = 0.1;
 
@@ -85,6 +87,27 @@ namespace AM_Annotator
             this.Text = project_path;
 
             annotatorProjectBTN.Enabled = false;
+
+
+
+            //Setting up AutoSave Thread
+            temp_workspace = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments) + "\\Annotator\\temp_workspace.am";
+
+            //auto_save_thread = new Thread(AutoSave);
+            //auto_save_thread.IsBackground = true;
+            //auto_save_thread.Start();
+
+        }
+
+        //AutoSave Thread
+        private void AutoSave()
+        {
+            while (auto_save_thread.IsAlive)
+            {
+                SaveConfiguration(temp_workspace);
+                Thread.Sleep(Properties.Settings.Default.AutoSaveInterval * 1000);
+            }
+            
         }
 
         /********************************This is where the load button is pressed*******************************/
@@ -101,20 +124,35 @@ namespace AM_Annotator
 
             if (openDir.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(openDir.SelectedPath))
             {
+                //thread
+                Thread load_thread = new Thread(() => LoadProcess(openDir.SelectedPath));
+                load_thread.IsBackground = true;
+                load_thread.Start();
+                //load_thread.Join();
+                //load_thread.Abort();
+
                 
+            }
+        }
+
+        private void LoadProcess(string path)
+        {
+            this.Invoke((MethodInvoker) delegate
+            {
                 /*if the directory is not added already*/
-                if (!annotation_imgs.Any(x => x.GetParentPath() == openDir.SelectedPath))
+                if (!annotation_imgs.Any(x => x.GetParentPath() == path))
                 {
                     /*If it contains any image*/
-                    if (loadImages(openDir.SelectedPath) > 0)
+                    if (loadImages(path) > 0)
                     {
-                        last_openned_directory = openDir.SelectedPath;
+                        last_openned_directory = path;
                         updateFolderListBox();
                         folderLB.SelectedIndex = 0;
                         AlertUnsavedProject(false);
                     }
                 }
-            }
+            });
+            
         }
 
         /*******************************Loading the Images given the directory*********************/
@@ -620,74 +658,81 @@ namespace AM_Annotator
             writer_settings.IndentChars = ("\t");
             writer_settings.Indent = true;
             writer_settings.ConformanceLevel = ConformanceLevel.Auto;
-
-            XmlWriter writer = XmlWriter.Create(file_location, writer_settings);
-
-            //Writing the Components
-            writer.WriteStartDocument();
-
-            writer.WriteStartElement("Project");
-            writer.WriteAttributeString("Name", Path.GetFileName(file_location));
-
-            //Writing Project Setting
-            writer.WriteStartElement("Setting");
-            writer.WriteStartElement("Formats");
-
-            writer.WriteAttributeString("Opencv", Convert.ToString(Properties.Settings.Default.OpencvAnnotation));
-            writer.WriteAttributeString("Darknet", Convert.ToString(Properties.Settings.Default.DarknetAnnotation));
-            writer.WriteAttributeString("Pascal", Convert.ToString(Properties.Settings.Default.PascalVOCAnnotation));
-
-            writer.WriteEndElement();
-
-
-            writer.WriteEndElement();
-
-            //Writing The folder name
-            foreach (string folder in folderLB.Items)
+            XmlWriter writer;
+            try
             {
-                writer.WriteStartElement("Folder");
-                writer.WriteAttributeString("Location", folder);
+                writer = XmlWriter.Create(file_location, writer_settings);
+                //Writing the Components
+                writer.WriteStartDocument();
 
-                //Getting all the images that contains the parent folder
-                List<AnnotationImage> annotation_images = annotation_imgs.Where(x => x.GetImageLocation().Contains(folder)).ToList();
+                writer.WriteStartElement("Project");
+                writer.WriteAttributeString("Name", Path.GetFileName(file_location));
 
-                foreach (AnnotationImage annotation_image in annotation_images)
+                //Writing Project Setting
+                writer.WriteStartElement("Setting");
+                writer.WriteStartElement("Formats");
+
+                writer.WriteAttributeString("Opencv", Convert.ToString(Properties.Settings.Default.OpencvAnnotation));
+                writer.WriteAttributeString("Darknet", Convert.ToString(Properties.Settings.Default.DarknetAnnotation));
+                writer.WriteAttributeString("Pascal", Convert.ToString(Properties.Settings.Default.PascalVOCAnnotation));
+
+                writer.WriteEndElement();
+
+                writer.WriteEndElement();
+
+                //Writing The folder name
+                foreach (string folder in folderLB.Items)
                 {
-                    writer.WriteStartElement("Image");
+                    writer.WriteStartElement("Folder");
+                    writer.WriteAttributeString("Location", folder);
 
-                    writer.WriteAttributeString("Location", annotation_image.GetImageLocation());
+                    //Getting all the images that contains the parent folder
+                    List<AnnotationImage> annotation_images = annotation_imgs.Where(x => x.GetImageLocation().Contains(folder)).ToList();
 
-                    List<FeatureLabel> labels = annotation_image.GetLabels();
-                    foreach (FeatureLabel label in labels)
+                    foreach (AnnotationImage annotation_image in annotation_images)
                     {
-                        writer.WriteStartElement("Annotation");
+                        writer.WriteStartElement("Image");
 
-                        writer.WriteAttributeString("Id", label.Id.ToString());
+                        writer.WriteAttributeString("Location", annotation_image.GetImageLocation());
 
-                        writer.WriteAttributeString("X", label.X.ToString());
+                        List<FeatureLabel> labels = annotation_image.GetLabels();
+                        foreach (FeatureLabel label in labels)
+                        {
+                            writer.WriteStartElement("Annotation");
 
-                        writer.WriteAttributeString("Y", label.Y.ToString());
+                            writer.WriteAttributeString("Id", label.Id.ToString());
 
-                        writer.WriteAttributeString("Width", label.Width.ToString());
+                            writer.WriteAttributeString("X", label.X.ToString());
 
-                        writer.WriteAttributeString("Height", label.Height.ToString());
+                            writer.WriteAttributeString("Y", label.Y.ToString());
+
+                            writer.WriteAttributeString("Width", label.Width.ToString());
+
+                            writer.WriteAttributeString("Height", label.Height.ToString());
+
+                            writer.WriteEndElement();
+                        }
 
                         writer.WriteEndElement();
                     }
-                                        
+
+
+
                     writer.WriteEndElement();
                 }
-                
-
-                
                 writer.WriteEndElement();
+                writer.WriteEndDocument();
+
+
+                //writer.Flush();
+                writer.Close();
             }
-            writer.WriteEndElement();
-            writer.WriteEndDocument();
+            catch (Exception ex)
+            {
+            }
+            
 
-
-            //writer.Flush();
-            writer.Close();
+            
 
             AlertUnsavedProject(true);
         }
@@ -747,25 +792,31 @@ namespace AM_Annotator
                     }
                 }
             }
+
+            updateFolderListBox();
         }
 
         /***********************************************Unsaved Alret Routine************************************************/
         private void AlertUnsavedProject(bool clearFlag)
         {
-            if (clearFlag)
+            this.Invoke((MethodInvoker) delegate
             {
-                if (this.Text.Contains("*"))
+                if (clearFlag)
                 {
-                    this.Text = project_path;
+                    if (this.Text.Contains("*"))
+                    {
+                        this.Text = project_path;
+                    }
+                    return;
                 }
-                return;
-            }
-            //if (!project_path.Contains("*"))
-            if(!this.Text.Contains("*"))
-            {
-                //project_path += "*";
-                this.Text = project_path + "*";
-            }
+                //if (!project_path.Contains("*"))
+                if (!this.Text.Contains("*"))
+                {
+                    //project_path += "*";
+                    this.Text = project_path + "*";
+                }
+            });
+            
         }
 
 
@@ -832,6 +883,36 @@ namespace AM_Annotator
             t.Start();
             this.Close();
            
+        }
+
+        private void loadLastWorkspaceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (temp_workspace != "")// && File.Exists(temp_workspace))
+            {
+                LoadConfiguration(temp_workspace);
+            }
+        }
+
+        private void mainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SaveConfiguration(temp_workspace);
+        }
+
+        private void useTrackerCB_MouseHover(object sender, EventArgs e)
+        {
+            ToolTip tip = new ToolTip();
+            //tip.ToolTipTitle = "Alias Directory";
+            //tip.Show("Path to the images in the training machine", this, 10);
+            tip.SetToolTip(useTrackerCB, "Check this control to activate tracker assistant. Tracker assistant will assist in annotation of consecutive images.");
+        }
+
+        private void useTrackerCB_CheckedChanged(object sender, EventArgs e)
+        {
+            //if it is activated
+            if (useTrackerCB.Checked)
+            {
+
+            }
         }
     }
 }

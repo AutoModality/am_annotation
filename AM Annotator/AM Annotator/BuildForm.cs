@@ -20,6 +20,15 @@ namespace AM_Annotator
     };
     public partial class BuildForm : Form
     {
+        private string opencv_output_location = "";
+        private string darknet_output_location = "";
+        private string pascal_output_location = "";
+
+
+        public string OpencvOutputLocation { get { return opencv_output_location; } }
+        public string DarknetOutputLocation { get { return darknet_output_location; } }
+        public string PascalOutputLocation { get { return pascal_output_location; } }
+
         private Thread buildingThread;
         private List<AnnotationImage> annotations;
         private BUILD_LEVEL build_level;
@@ -75,6 +84,7 @@ namespace AM_Annotator
                 oaf.Add(annotations[i]);
                 UpdateProgressBar(i / annotations.Count);
             }
+            
             CloseForm();
         }
         /// <summary>

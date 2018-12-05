@@ -31,6 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingForm));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.preferencesTabPage = new System.Windows.Forms.TabPage();
+            this.aliasTB = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.trainPercentageNUD = new System.Windows.Forms.NumericUpDown();
             this.setBTN = new System.Windows.Forms.Button();
@@ -40,8 +42,6 @@
             this.yoloFormatCB = new System.Windows.Forms.CheckBox();
             this.cascadeFormatCB = new System.Windows.Forms.CheckBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.label3 = new System.Windows.Forms.Label();
-            this.aliasTB = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.preferencesTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trainPercentageNUD)).BeginInit();
@@ -82,6 +82,23 @@
             this.preferencesTabPage.TabIndex = 0;
             this.preferencesTabPage.Text = "Annotation Output";
             this.preferencesTabPage.UseVisualStyleBackColor = true;
+            // 
+            // aliasTB
+            // 
+            this.aliasTB.Location = new System.Drawing.Point(90, 172);
+            this.aliasTB.Name = "aliasTB";
+            this.aliasTB.Size = new System.Drawing.Size(306, 20);
+            this.aliasTB.TabIndex = 17;
+            this.aliasTB.MouseHover += new System.EventHandler(this.aliasTB_MouseHover);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(14, 175);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(77, 13);
+            this.label3.TabIndex = 16;
+            this.label3.Text = "Alias Directory:";
             // 
             // label2
             // 
@@ -190,23 +207,6 @@
             this.tabPage2.Text = "Data Collection";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(14, 175);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(77, 13);
-            this.label3.TabIndex = 16;
-            this.label3.Text = "Alias Directory:";
-            // 
-            // aliasTB
-            // 
-            this.aliasTB.Location = new System.Drawing.Point(90, 172);
-            this.aliasTB.Name = "aliasTB";
-            this.aliasTB.Size = new System.Drawing.Size(306, 20);
-            this.aliasTB.TabIndex = 17;
-            this.aliasTB.MouseHover += new System.EventHandler(this.aliasTB_MouseHover);
-            // 
             // SettingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -216,6 +216,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SettingForm";
             this.Text = "Preferences";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SettingForm_FormClosing);
             this.Load += new System.EventHandler(this.SettingForm_Load);
             this.tabControl1.ResumeLayout(false);
             this.preferencesTabPage.ResumeLayout(false);

@@ -10,12 +10,14 @@ namespace AM_Annotator
     class OpencvAnnotationFormat
     {
         private string output_directory_raw;
+        private string alias_directory = "";
         public OpencvAnnotationFormat()
         {
 
         }
-        public OpencvAnnotationFormat(string output_directory)
+        public OpencvAnnotationFormat(string output_directory, string alias_dir = "")
         {
+            alias_directory = alias_dir;
             output_directory_raw = output_directory + "\\opencv_annotations\\";
             Directory.CreateDirectory(output_directory_raw);
         }

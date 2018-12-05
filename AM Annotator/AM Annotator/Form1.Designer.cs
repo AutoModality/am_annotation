@@ -76,6 +76,8 @@
             this.openProjectBTN = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.loadImageProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.loadLastWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.useTrackerCB = new System.Windows.Forms.CheckBox();
             this.toolStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -93,6 +95,7 @@
             this.newWorkspaceBTN,
             this.saveWorkspaceToolStripMenuItem,
             this.newProjectToolStripMenuItem,
+            this.loadLastWorkspaceToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -103,28 +106,28 @@
             // newWorkspaceBTN
             // 
             this.newWorkspaceBTN.Name = "newWorkspaceBTN";
-            this.newWorkspaceBTN.Size = new System.Drawing.Size(161, 22);
+            this.newWorkspaceBTN.Size = new System.Drawing.Size(185, 22);
             this.newWorkspaceBTN.Text = "New Workspace";
             this.newWorkspaceBTN.Click += new System.EventHandler(this.newWorkspaceBTN_Click);
             // 
             // saveWorkspaceToolStripMenuItem
             // 
             this.saveWorkspaceToolStripMenuItem.Name = "saveWorkspaceToolStripMenuItem";
-            this.saveWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.saveWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.saveWorkspaceToolStripMenuItem.Text = "Save Workspace";
             this.saveWorkspaceToolStripMenuItem.Click += new System.EventHandler(this.saveWorkspaceToolStripMenuItem_Click);
             // 
             // newProjectToolStripMenuItem
             // 
             this.newProjectToolStripMenuItem.Name = "newProjectToolStripMenuItem";
-            this.newProjectToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.newProjectToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.newProjectToolStripMenuItem.Text = "Load Workspace";
             this.newProjectToolStripMenuItem.Click += new System.EventHandler(this.newProjectToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -142,7 +145,7 @@
             // preferencesToolStripMenuItem
             // 
             this.preferencesToolStripMenuItem.Name = "preferencesToolStripMenuItem";
-            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.preferencesToolStripMenuItem.Text = "Preferences";
             this.preferencesToolStripMenuItem.Click += new System.EventHandler(this.preferencesToolStripMenuItem_Click);
             // 
@@ -543,11 +546,32 @@
             this.loadImageProgressBar.Size = new System.Drawing.Size(200, 16);
             this.loadImageProgressBar.Step = 1;
             // 
+            // loadLastWorkspaceToolStripMenuItem
+            // 
+            this.loadLastWorkspaceToolStripMenuItem.Name = "loadLastWorkspaceToolStripMenuItem";
+            this.loadLastWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.loadLastWorkspaceToolStripMenuItem.Text = "Load Last Workspace";
+            this.loadLastWorkspaceToolStripMenuItem.Click += new System.EventHandler(this.loadLastWorkspaceToolStripMenuItem_Click);
+            // 
+            // useTrackerCB
+            // 
+            this.useTrackerCB.AutoSize = true;
+            this.useTrackerCB.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.useTrackerCB.Location = new System.Drawing.Point(958, 526);
+            this.useTrackerCB.Name = "useTrackerCB";
+            this.useTrackerCB.Size = new System.Drawing.Size(114, 24);
+            this.useTrackerCB.TabIndex = 19;
+            this.useTrackerCB.Text = "Use Tracker";
+            this.useTrackerCB.UseVisualStyleBackColor = true;
+            this.useTrackerCB.CheckedChanged += new System.EventHandler(this.useTrackerCB_CheckedChanged);
+            this.useTrackerCB.MouseHover += new System.EventHandler(this.useTrackerCB_MouseHover);
+            // 
             // mainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1172, 759);
+            this.Controls.Add(this.useTrackerCB);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.openProjectBTN);
             this.Controls.Add(this.groupBox2);
@@ -563,6 +587,7 @@
             this.MinimizeBox = false;
             this.Name = "mainWindow";
             this.Text = "Annotator";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.mainWindow_FormClosing);
             this.Load += new System.EventHandler(this.mainWindow_Load);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
@@ -630,6 +655,8 @@
         private System.Windows.Forms.Button openProjectBTN;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripProgressBar loadImageProgressBar;
+        private System.Windows.Forms.ToolStripMenuItem loadLastWorkspaceToolStripMenuItem;
+        private System.Windows.Forms.CheckBox useTrackerCB;
     }
 }
 
