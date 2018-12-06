@@ -30,7 +30,7 @@ namespace AM_Annotator
         /*when key is pressed. Make sure it is only numbers*/
         private void idLabelTB_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == 13 && idLabelTB.Text != "")
+            if ((e.KeyChar == 13 || char.IsLetter(e.KeyChar)) && idLabelTB.Text != "")
             {
                 setLabelBTN.PerformClick();
             }
@@ -42,6 +42,30 @@ namespace AM_Annotator
             this.BringToFront();
             this.TopMost = true;
             idLabelTB.Select();
+        }
+
+        private void labelForm_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            
+        }
+
+        private void labelForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                this.DialogResult = DialogResult.Cancel;
+                this.Close();
+            }
+        }
+
+        private void idLabelTB_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                this.DialogResult = DialogResult.Cancel;
+                this.Close();
+            }
+           
         }
     }
 }

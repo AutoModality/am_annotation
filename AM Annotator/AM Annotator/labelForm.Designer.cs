@@ -48,6 +48,7 @@
             this.idLabelTB.Name = "idLabelTB";
             this.idLabelTB.Size = new System.Drawing.Size(100, 20);
             this.idLabelTB.TabIndex = 1;
+            this.idLabelTB.KeyDown += new System.Windows.Forms.KeyEventHandler(this.idLabelTB_KeyDown);
             this.idLabelTB.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.idLabelTB_KeyPress);
             // 
             // labelForm
@@ -63,6 +64,8 @@
             this.Name = "labelForm";
             this.Text = "Insert Label";
             this.Load += new System.EventHandler(this.labelForm_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.labelForm_KeyDown);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.labelForm_KeyPress);
             this.ResumeLayout(false);
             this.PerformLayout();
 

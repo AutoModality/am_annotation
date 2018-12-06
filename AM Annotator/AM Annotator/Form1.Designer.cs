@@ -33,6 +33,7 @@
             this.newWorkspaceBTN = new System.Windows.Forms.ToolStripMenuItem();
             this.saveWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadLastWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripDropDownButton2 = new System.Windows.Forms.ToolStripDropDownButton();
             this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -76,8 +77,8 @@
             this.openProjectBTN = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.loadImageProgressBar = new System.Windows.Forms.ToolStripProgressBar();
-            this.loadLastWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.useTrackerCB = new System.Windows.Forms.CheckBox();
+            this.deleteAllBTN = new System.Windows.Forms.Button();
+            this.assistantMethodCB = new System.Windows.Forms.ComboBox();
             this.toolStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -124,6 +125,13 @@
             this.newProjectToolStripMenuItem.Text = "Load Workspace";
             this.newProjectToolStripMenuItem.Click += new System.EventHandler(this.newProjectToolStripMenuItem_Click);
             // 
+            // loadLastWorkspaceToolStripMenuItem
+            // 
+            this.loadLastWorkspaceToolStripMenuItem.Name = "loadLastWorkspaceToolStripMenuItem";
+            this.loadLastWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.loadLastWorkspaceToolStripMenuItem.Text = "Load Last Workspace";
+            this.loadLastWorkspaceToolStripMenuItem.Click += new System.EventHandler(this.loadLastWorkspaceToolStripMenuItem_Click);
+            // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
@@ -145,7 +153,7 @@
             // preferencesToolStripMenuItem
             // 
             this.preferencesToolStripMenuItem.Name = "preferencesToolStripMenuItem";
-            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
             this.preferencesToolStripMenuItem.Text = "Preferences";
             this.preferencesToolStripMenuItem.Click += new System.EventHandler(this.preferencesToolStripMenuItem_Click);
             // 
@@ -481,6 +489,7 @@
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.deleteAllBTN);
             this.groupBox6.Controls.Add(this.viewAllAnnotationsBTN);
             this.groupBox6.Controls.Add(this.deleteAnnotationBTN);
             this.groupBox6.Controls.Add(this.currentImgAnnotationsLB);
@@ -493,7 +502,7 @@
             // 
             // viewAllAnnotationsBTN
             // 
-            this.viewAllAnnotationsBTN.Location = new System.Drawing.Point(414, 76);
+            this.viewAllAnnotationsBTN.Location = new System.Drawing.Point(414, 45);
             this.viewAllAnnotationsBTN.Name = "viewAllAnnotationsBTN";
             this.viewAllAnnotationsBTN.Size = new System.Drawing.Size(75, 23);
             this.viewAllAnnotationsBTN.TabIndex = 2;
@@ -507,7 +516,7 @@
             this.deleteAnnotationBTN.Name = "deleteAnnotationBTN";
             this.deleteAnnotationBTN.Size = new System.Drawing.Size(75, 23);
             this.deleteAnnotationBTN.TabIndex = 1;
-            this.deleteAnnotationBTN.Text = "Delete Annotation";
+            this.deleteAnnotationBTN.Text = "Delete";
             this.deleteAnnotationBTN.UseVisualStyleBackColor = true;
             this.deleteAnnotationBTN.Click += new System.EventHandler(this.deleteAnnotationBTN_Click);
             // 
@@ -546,32 +555,36 @@
             this.loadImageProgressBar.Size = new System.Drawing.Size(200, 16);
             this.loadImageProgressBar.Step = 1;
             // 
-            // loadLastWorkspaceToolStripMenuItem
+            // deleteAllBTN
             // 
-            this.loadLastWorkspaceToolStripMenuItem.Name = "loadLastWorkspaceToolStripMenuItem";
-            this.loadLastWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.loadLastWorkspaceToolStripMenuItem.Text = "Load Last Workspace";
-            this.loadLastWorkspaceToolStripMenuItem.Click += new System.EventHandler(this.loadLastWorkspaceToolStripMenuItem_Click);
+            this.deleteAllBTN.Location = new System.Drawing.Point(414, 76);
+            this.deleteAllBTN.Name = "deleteAllBTN";
+            this.deleteAllBTN.Size = new System.Drawing.Size(75, 23);
+            this.deleteAllBTN.TabIndex = 3;
+            this.deleteAllBTN.Text = "Delete All";
+            this.deleteAllBTN.UseVisualStyleBackColor = true;
+            this.deleteAllBTN.Click += new System.EventHandler(this.deleteAllBTN_Click);
             // 
-            // useTrackerCB
+            // assistantMethodCB
             // 
-            this.useTrackerCB.AutoSize = true;
-            this.useTrackerCB.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.useTrackerCB.Location = new System.Drawing.Point(958, 526);
-            this.useTrackerCB.Name = "useTrackerCB";
-            this.useTrackerCB.Size = new System.Drawing.Size(114, 24);
-            this.useTrackerCB.TabIndex = 19;
-            this.useTrackerCB.Text = "Use Tracker";
-            this.useTrackerCB.UseVisualStyleBackColor = true;
-            this.useTrackerCB.CheckedChanged += new System.EventHandler(this.useTrackerCB_CheckedChanged);
-            this.useTrackerCB.MouseHover += new System.EventHandler(this.useTrackerCB_MouseHover);
+            this.assistantMethodCB.FormattingEnabled = true;
+            this.assistantMethodCB.ItemHeight = 13;
+            this.assistantMethodCB.Items.AddRange(new object[] {
+            "Select Assistant",
+            "Tracker",
+            "Feature Descriptors"});
+            this.assistantMethodCB.Location = new System.Drawing.Point(958, 530);
+            this.assistantMethodCB.Name = "assistantMethodCB";
+            this.assistantMethodCB.Size = new System.Drawing.Size(197, 21);
+            this.assistantMethodCB.TabIndex = 19;
+            this.assistantMethodCB.SelectedIndexChanged += new System.EventHandler(this.assistantMethodCB_SelectedIndexChanged);
             // 
             // mainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1172, 759);
-            this.Controls.Add(this.useTrackerCB);
+            this.Controls.Add(this.assistantMethodCB);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.openProjectBTN);
             this.Controls.Add(this.groupBox2);
@@ -656,7 +669,8 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripProgressBar loadImageProgressBar;
         private System.Windows.Forms.ToolStripMenuItem loadLastWorkspaceToolStripMenuItem;
-        private System.Windows.Forms.CheckBox useTrackerCB;
+        private System.Windows.Forms.Button deleteAllBTN;
+        private System.Windows.Forms.ComboBox assistantMethodCB;
     }
 }
 

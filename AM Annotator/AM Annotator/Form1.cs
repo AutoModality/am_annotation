@@ -19,8 +19,7 @@ namespace AM_Annotator
 {
     public partial class mainWindow : Form
     {
-        Emgu.CV.Tracking.TrackerBoosting csrt_tracker = new Emgu.CV.Tracking.TrackerBoosting();
-
+        Emgu.CV.Tracking.TrackerTLD csrt_tracker = new Emgu.CV.Tracking.TrackerTLD();
         Thread auto_save_thread;
 
         Mat selected_img = new Mat();
@@ -43,12 +42,15 @@ namespace AM_Annotator
         private int selected_annotation_index = -1;
         private int selected_label_index = -1;
         private int annotation_font_size = 12;
-        
+        private int tracker_reference_class_id = 0;
+
+
 
         private bool annotation_selected = false;
         private bool multi_annotation_view = false;
         private bool mouseIsDown = false;
         private bool use_tracker = false;
+        private bool use_feature_descriptor = false;
 
         private Thread SplashThread;
         public mainWindow(bool runSplash = true)
@@ -79,7 +81,9 @@ namespace AM_Annotator
 
         private void mainWindow_Load(object sender, EventArgs e)
         {
-           
+
+            assistantMethodCB.SelectedIndex = 0;
+
             this.StartPosition = FormStartPosition.Manual;
             this.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 5, Screen.PrimaryScreen.Bounds.Height / 5);
             this.BringToFront();
@@ -274,11 +278,14 @@ namespace AM_Annotator
                 Image<Bgr, Byte> my_image = selected_img.ToImage<Bgr, byte>();
                 mainPB.Image = my_image.ToBitmap();
 
-                if (use_tracker && annotation_imgs[selected_annotation_index].GetLabels().Count == 0)
+                if (use_tracker && annotation_imgs[selected_annotation_index].GetLabels().Count <= 1)
                 {
                     Rectangle roi = new Rectangle();
-                    csrt_tracker.Update(selected_img, out roi);
-                    annotation_imgs[selected_annotation_index].AddLabel(0, roi.X, roi.Y, roi.Width, roi.Height);
+                    if (csrt_tracker.Update(selected_img, out roi))
+                    {
+                        csrt_tracker.Init(selected_img, roi);
+                        annotation_imgs[selected_annotation_index].AddLabel(tracker_reference_class_id, roi.X, roi.Y, roi.Width, roi.Height);
+                    }
                 }
 
                 /*updating the annotation ListBox*/
@@ -425,7 +432,12 @@ namespace AM_Annotator
                     viewAllAnnotationsBTN.PerformClick();
                     //currentImgAnnotationsLB.Items.Add(annotation_imgs[selected_annotation_index].ToString());
                     AlertUnsavedProject(false);
+
+                    csrt_tracker = new Emgu.CV.Tracking.TrackerTLD();
                     csrt_tracker.Init(annotation_imgs[selected_annotation_index].GetMat(), new Rectangle(x, y, width, height));
+                    tracker_reference_class_id = labelForm.LabelClass;
+
+
                 }
             }
             catch (Exception ex)
@@ -910,19 +922,47 @@ namespace AM_Annotator
             SaveConfiguration(temp_workspace);
         }
 
-        private void useTrackerCB_MouseHover(object sender, EventArgs e)
+        /*private void useTrackerCB_MouseHover(object sender, EventArgs e)
         {
             ToolTip tip = new ToolTip();
             //tip.ToolTipTitle = "Alias Directory";
             //tip.Show("Path to the images in the training machine", this, 10);
             tip.SetToolTip(useTrackerCB, "Check this control to activate tracker assistant. Tracker assistant will assist in annotation of consecutive images.");
-        }
+        }*/
 
-        private void useTrackerCB_CheckedChanged(object sender, EventArgs e)
+        /*private void useTrackerCB_CheckedChanged(object sender, EventArgs e)
         {
             use_tracker = useTrackerCB.Checked;
+        }*/
 
+        private void deleteAllBTN_Click(object sender, EventArgs e)
+        {
+            if (annotation_imgs.Count == 0)
+            {
+                return;
+            }
+            annotation_imgs[selected_annotation_index].RemoveAllLabels();
+            updateAnnotationLB();
+            imageLB_SelectedIndexChanged(imageLB, EventArgs.Empty);
+        }
 
+        private void assistantMethodCB_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (assistantMethodCB.SelectedIndex)
+            {
+                case 0:
+                    use_tracker = false;
+                    use_feature_descriptor = false;
+                    break;
+                case 1:
+                    use_tracker = true;
+                    use_feature_descriptor = false;
+                    break;
+                case 2:
+                    use_tracker = false;
+                    use_feature_descriptor = true;
+                    break;
+            }
         }
     }
 }
