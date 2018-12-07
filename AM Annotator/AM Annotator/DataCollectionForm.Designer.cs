@@ -39,9 +39,10 @@
             this.toolStripDropDownButton3 = new System.Windows.Forms.ToolStripDropDownButton();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.devicesLB = new System.Windows.Forms.ListBox();
             this.refreshBTN = new System.Windows.Forms.Button();
+            this.devicesLB = new System.Windows.Forms.ListBox();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.projectOrganizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.cameraPB)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -93,24 +94,25 @@
             this.Project.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.Project.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.annotatorToolStripMenuItem,
-            this.dataCollectionToolStripMenuItem});
+            this.dataCollectionToolStripMenuItem,
+            this.projectOrganizerToolStripMenuItem});
             this.Project.Image = ((System.Drawing.Image)(resources.GetObject("Project.Image")));
             this.Project.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.Project.Name = "Project";
-            this.Project.Size = new System.Drawing.Size(57, 22);
-            this.Project.Text = "Project";
+            this.Project.Size = new System.Drawing.Size(62, 22);
+            this.Project.Text = "Projects";
             // 
             // annotatorToolStripMenuItem
             // 
             this.annotatorToolStripMenuItem.Name = "annotatorToolStripMenuItem";
-            this.annotatorToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.annotatorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.annotatorToolStripMenuItem.Text = "Annotator";
             this.annotatorToolStripMenuItem.Click += new System.EventHandler(this.annotatorToolStripMenuItem_Click);
             // 
             // dataCollectionToolStripMenuItem
             // 
             this.dataCollectionToolStripMenuItem.Name = "dataCollectionToolStripMenuItem";
-            this.dataCollectionToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.dataCollectionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.dataCollectionToolStripMenuItem.Text = "Data Collection";
             // 
             // toolStripDropDownButton3
@@ -145,6 +147,24 @@
             this.tabPage1.Text = "Live";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // refreshBTN
+            // 
+            this.refreshBTN.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("refreshBTN.BackgroundImage")));
+            this.refreshBTN.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.refreshBTN.Location = new System.Drawing.Point(306, 15);
+            this.refreshBTN.Name = "refreshBTN";
+            this.refreshBTN.Size = new System.Drawing.Size(34, 34);
+            this.refreshBTN.TabIndex = 0;
+            this.refreshBTN.UseVisualStyleBackColor = true;
+            // 
+            // devicesLB
+            // 
+            this.devicesLB.FormattingEnabled = true;
+            this.devicesLB.Location = new System.Drawing.Point(7, 15);
+            this.devicesLB.Name = "devicesLB";
+            this.devicesLB.Size = new System.Drawing.Size(293, 95);
+            this.devicesLB.TabIndex = 1;
+            // 
             // tabPage2
             // 
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
@@ -155,23 +175,12 @@
             this.tabPage2.Text = "Google Image";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // devicesLB
+            // projectOrganizerToolStripMenuItem
             // 
-            this.devicesLB.FormattingEnabled = true;
-            this.devicesLB.Location = new System.Drawing.Point(7, 15);
-            this.devicesLB.Name = "devicesLB";
-            this.devicesLB.Size = new System.Drawing.Size(293, 95);
-            this.devicesLB.TabIndex = 1;
-            // 
-            // refreshBTN
-            // 
-            this.refreshBTN.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("refreshBTN.BackgroundImage")));
-            this.refreshBTN.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.refreshBTN.Location = new System.Drawing.Point(306, 15);
-            this.refreshBTN.Name = "refreshBTN";
-            this.refreshBTN.Size = new System.Drawing.Size(34, 34);
-            this.refreshBTN.TabIndex = 0;
-            this.refreshBTN.UseVisualStyleBackColor = true;
+            this.projectOrganizerToolStripMenuItem.Name = "projectOrganizerToolStripMenuItem";
+            this.projectOrganizerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.projectOrganizerToolStripMenuItem.Text = "Project Organizer";
+            this.projectOrganizerToolStripMenuItem.Click += new System.EventHandler(this.projectOrganizerToolStripMenuItem_Click);
             // 
             // DataCollectionForm
             // 
@@ -210,5 +219,6 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.ListBox devicesLB;
         private System.Windows.Forms.Button refreshBTN;
+        private System.Windows.Forms.ToolStripMenuItem projectOrganizerToolStripMenuItem;
     }
 }

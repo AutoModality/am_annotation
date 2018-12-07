@@ -71,14 +71,15 @@
             this.imgRemoveBTN = new System.Windows.Forms.Button();
             this.mainPB = new System.Windows.Forms.PictureBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.deleteAllBTN = new System.Windows.Forms.Button();
             this.viewAllAnnotationsBTN = new System.Windows.Forms.Button();
             this.deleteAnnotationBTN = new System.Windows.Forms.Button();
             this.currentImgAnnotationsLB = new System.Windows.Forms.ListBox();
             this.openProjectBTN = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.loadImageProgressBar = new System.Windows.Forms.ToolStripProgressBar();
-            this.deleteAllBTN = new System.Windows.Forms.Button();
             this.assistantMethodCB = new System.Windows.Forms.ComboBox();
+            this.projectOrganizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -175,7 +176,8 @@
             this.projectToolBarBTN.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.projectToolBarBTN.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.annotatorProjectBTN,
-            this.dataCollectionToolStripMenuItem});
+            this.dataCollectionToolStripMenuItem,
+            this.projectOrganizerToolStripMenuItem});
             this.projectToolBarBTN.Image = ((System.Drawing.Image)(resources.GetObject("projectToolBarBTN.Image")));
             this.projectToolBarBTN.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.projectToolBarBTN.Name = "projectToolBarBTN";
@@ -185,13 +187,13 @@
             // annotatorProjectBTN
             // 
             this.annotatorProjectBTN.Name = "annotatorProjectBTN";
-            this.annotatorProjectBTN.Size = new System.Drawing.Size(155, 22);
+            this.annotatorProjectBTN.Size = new System.Drawing.Size(180, 22);
             this.annotatorProjectBTN.Text = "Annotator";
             // 
             // dataCollectionToolStripMenuItem
             // 
             this.dataCollectionToolStripMenuItem.Name = "dataCollectionToolStripMenuItem";
-            this.dataCollectionToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.dataCollectionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.dataCollectionToolStripMenuItem.Text = "Data Collection";
             this.dataCollectionToolStripMenuItem.Click += new System.EventHandler(this.dataCollectionToolStripMenuItem_Click);
             // 
@@ -500,6 +502,16 @@
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Annotations";
             // 
+            // deleteAllBTN
+            // 
+            this.deleteAllBTN.Location = new System.Drawing.Point(414, 76);
+            this.deleteAllBTN.Name = "deleteAllBTN";
+            this.deleteAllBTN.Size = new System.Drawing.Size(75, 23);
+            this.deleteAllBTN.TabIndex = 3;
+            this.deleteAllBTN.Text = "Delete All";
+            this.deleteAllBTN.UseVisualStyleBackColor = true;
+            this.deleteAllBTN.Click += new System.EventHandler(this.deleteAllBTN_Click);
+            // 
             // viewAllAnnotationsBTN
             // 
             this.viewAllAnnotationsBTN.Location = new System.Drawing.Point(414, 45);
@@ -555,16 +567,6 @@
             this.loadImageProgressBar.Size = new System.Drawing.Size(200, 16);
             this.loadImageProgressBar.Step = 1;
             // 
-            // deleteAllBTN
-            // 
-            this.deleteAllBTN.Location = new System.Drawing.Point(414, 76);
-            this.deleteAllBTN.Name = "deleteAllBTN";
-            this.deleteAllBTN.Size = new System.Drawing.Size(75, 23);
-            this.deleteAllBTN.TabIndex = 3;
-            this.deleteAllBTN.Text = "Delete All";
-            this.deleteAllBTN.UseVisualStyleBackColor = true;
-            this.deleteAllBTN.Click += new System.EventHandler(this.deleteAllBTN_Click);
-            // 
             // assistantMethodCB
             // 
             this.assistantMethodCB.FormattingEnabled = true;
@@ -578,6 +580,13 @@
             this.assistantMethodCB.Size = new System.Drawing.Size(197, 21);
             this.assistantMethodCB.TabIndex = 19;
             this.assistantMethodCB.SelectedIndexChanged += new System.EventHandler(this.assistantMethodCB_SelectedIndexChanged);
+            // 
+            // projectOrganizerToolStripMenuItem
+            // 
+            this.projectOrganizerToolStripMenuItem.Name = "projectOrganizerToolStripMenuItem";
+            this.projectOrganizerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.projectOrganizerToolStripMenuItem.Text = "Project Organizer";
+            this.projectOrganizerToolStripMenuItem.Click += new System.EventHandler(this.projectOrganizerToolStripMenuItem_Click);
             // 
             // mainWindow
             // 
@@ -671,6 +680,7 @@
         private System.Windows.Forms.ToolStripMenuItem loadLastWorkspaceToolStripMenuItem;
         private System.Windows.Forms.Button deleteAllBTN;
         private System.Windows.Forms.ComboBox assistantMethodCB;
+        private System.Windows.Forms.ToolStripMenuItem projectOrganizerToolStripMenuItem;
     }
 }
 

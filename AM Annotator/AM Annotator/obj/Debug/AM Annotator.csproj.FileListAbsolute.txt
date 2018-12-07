@@ -167,3 +167,4 @@ C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\
 C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM Annotator.pdb
 C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\AM Annotator.pdb
 C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM Annotator.csprojAssemblyReference.cache
+C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM_Annotator.ProjectOrganizerForm.resources

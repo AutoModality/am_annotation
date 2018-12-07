@@ -106,5 +106,57 @@ namespace AM_Annotator.Properties {
                 this["AutoSaveInterval"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+            "tring>Empty</string>\r\n  <string>Empty</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection ImageFolders {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["ImageFolders"]));
+            }
+            set {
+                this["ImageFolders"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+            "tring>Empty</string>\r\n  <string>Empty</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection AnntationFolders {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["AnntationFolders"]));
+            }
+            set {
+                this["AnntationFolders"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string OutputDirectory {
+            get {
+                return ((string)(this["OutputDirectory"]));
+            }
+            set {
+                this["OutputDirectory"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("90")]
+        public double OrganizerTrainPercentage {
+            get {
+                return ((double)(this["OrganizerTrainPercentage"]));
+            }
+            set {
+                this["OrganizerTrainPercentage"] = value;
+            }
+        }
     }
 }

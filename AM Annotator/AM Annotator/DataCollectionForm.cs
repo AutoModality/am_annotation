@@ -50,14 +50,29 @@ namespace AM_Annotator
             search_thread.Abort();
         }
 
-        /***********************************Starting the Data Collection App***********************************/
-        private void StartDataCollection()
+        /***********************************Starting the Annotator App***********************************/
+        private void StartAnnotator()
         {
             Application.Run(new mainWindow(false));
         }
         private void annotatorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(StartDataCollection));
+            System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(StartAnnotator));
+            t.SetApartmentState(System.Threading.ApartmentState.STA);
+            t.Start();
+            this.Close();
+        }
+
+
+
+        /***********************************Starting the Project Organizer App***********************************/
+        private void StartProjectOrganizer()
+        {
+            Application.Run(new ProjectOrganizerForm());
+        }
+        private void projectOrganizerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(StartProjectOrganizer));
             t.SetApartmentState(System.Threading.ApartmentState.STA);
             t.Start();
             this.Close();

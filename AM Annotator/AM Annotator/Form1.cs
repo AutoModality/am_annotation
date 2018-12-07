@@ -95,9 +95,6 @@ namespace AM_Annotator
             this.Text = project_path;
 
             annotatorProjectBTN.Enabled = false;
-
-
-
             //Setting up AutoSave Thread
             temp_workspace = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments) + "\\Annotator\\temp_workspace.am";
 
@@ -963,6 +960,18 @@ namespace AM_Annotator
                     use_feature_descriptor = true;
                     break;
             }
+        }
+
+        private void StartProjectOrganizer()
+        {
+            Application.Run(new ProjectOrganizerForm());
+        }
+        private void projectOrganizerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(StartProjectOrganizer));
+            t.SetApartmentState(System.Threading.ApartmentState.STA);
+            t.Start();
+            this.Close();
         }
     }
 }
