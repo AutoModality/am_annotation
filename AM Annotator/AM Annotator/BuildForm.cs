@@ -121,6 +121,7 @@ namespace AM_Annotator
             oaf = new OpencvAnnotationFormat(Properties.Settings.Default.ProjectLocation);
             daf = new DarknetAnnotationFormat(Properties.Settings.Default.ProjectLocation);
             paf = new PascalVOCAnnotationFormat(Properties.Settings.Default.ProjectLocation);
+            PrintInTerminal("Start Building All...");
             for (int i = 0; i < annotations.Count; i++)
             {
                 paf.Add(annotations[i]);
@@ -130,8 +131,9 @@ namespace AM_Annotator
                 //Thread.Sleep(1);
             }
 
-            daf.CreateTrainCollection(Properties.Settings.Default.TrainPercentage);
-            paf.CreateTrainCollection(Properties.Settings.Default.TrainPercentage);
+            PrintInTerminal("Done");
+            //daf.CreateTrainCollection(Properties.Settings.Default.TrainPercentage);
+            //paf.CreateTrainCollection(Properties.Settings.Default.TrainPercentage);
             UpdateProgressBar(100.0);
             CloseForm();
         }
@@ -178,5 +180,15 @@ namespace AM_Annotator
            });
         }
 
+        /*********************************************Thread Safe Terminal Print*************************************************/
+        private void PrintInTerminal(string msg)
+        {
+            this.Invoke((MethodInvoker) delegate
+            {
+                terminal.AppendText(msg);
+            });
+        }
+
+       
     }
 }

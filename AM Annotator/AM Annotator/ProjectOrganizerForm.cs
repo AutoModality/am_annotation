@@ -183,8 +183,8 @@ namespace AM_Annotator
         /************************************************Organization Process************************************************/
         private void organize()
         {
-            annotation_output_path = outputDirectoryTB.Text + "\\Labels";
-            image_output_path = outputDirectoryTB.Text + "\\Images";
+            annotation_output_path = outputDirectoryTB.Text + "\\labels";
+            image_output_path = outputDirectoryTB.Text + "\\images";
             Directory.CreateDirectory(annotation_output_path);
             Directory.CreateDirectory(image_output_path);
 
@@ -203,7 +203,7 @@ namespace AM_Annotator
             }
             printInTerminal("Processing ... Done. Total Number of Images: " + nAnnotationFiles.ToString());
             //Update Progressbar maximum Value
-            SetMaximumProgressBar(2*nAnnotationFiles);
+            SetMaximumProgressBar(nAnnotationFiles);
 
             //Start the Process
             for (int i = 0; i < annotationFolderLB.Items.Count; i++)
@@ -259,7 +259,7 @@ namespace AM_Annotator
             }
 
             //Collection test and train data
-            CreateTrainCollection();
+            //CreateTrainCollection();
 
             //re-enable the gui
             GUIAccess(true);

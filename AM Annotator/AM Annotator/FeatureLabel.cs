@@ -15,6 +15,12 @@ namespace AM_Annotator
         private Point _e;
         private Point _b;
         private Point _d;
+        private int _cx;
+        private int _cy;
+        private double _rcx;
+        private double _rcy;
+        private double _rw;
+        private double _rh;
 
         public int Id { get{ return _id; } set{ _id = value; } }
         public int X { get { return _x; } set { _x = value; } }
@@ -23,6 +29,12 @@ namespace AM_Annotator
         public int Height { get { return _h; } set { _h = value; } }
         public int End_X { get { return _ex; } set { _ex = value; } }
         public int End_Y { get { return _ey; } set { _ey = value; } }
+        public int C_X { get { return _cx; } set { _cx = value; } }
+        public int C_Y { get { return _cy; } set { _cy = value; } }
+        public double RC_X { get { return _rcx; } set { _rcx = value; } }
+        public double RC_Y { get { return _rcy; } set { _rcy = value; } }
+        public double RWidth { get { return _rw; } set { _rw = value; } }
+        public double RHeight { get { return _rh; } set { _rh = value; } }
         public Point End { get { return _e; } set { _e = value; } }
         public Point Begin { get { return _b; } set { _b = value; } }
         public Point Dimension { get { return _d; } set { _d = value; } }
@@ -42,6 +54,8 @@ namespace AM_Annotator
             _h = height;
             _ex = X + Width;
             _ey = Y + Height;
+            _cx = x + width / 2;
+            _cy = y + height / 2;
 
             _d = new Point(Width, Height);
             _b = new Point(X, Y);
@@ -56,8 +70,11 @@ namespace AM_Annotator
             _h = rect.Height;
             _ex = rect.X + rect.Width;
             _ey = rect.Y + rect.Height;
+            _cx = rect.X + rect.Width / 2;
+            _cy = rect.Y + rect.Height / 2;
 
-            _d = new Point(rect.Width, rect.Height);
+
+        _d = new Point(rect.Width, rect.Height);
             _b = new Point(rect.X, rect.Y);
             _e = new Point(_ex, _ey);
         }

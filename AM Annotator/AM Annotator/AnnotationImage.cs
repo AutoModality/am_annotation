@@ -102,6 +102,7 @@ namespace AM_Annotator
         //Getting all the labels Absolute and Relative
         public FeatureLabel GetLabelAt(int index) 
         {
+            ReviewLabels();
             if (index < 0 || index > labels.Count)
             {
                 return new FeatureLabel();
@@ -112,12 +113,14 @@ namespace AM_Annotator
         //Getting all Absolute Labels
         public List<FeatureLabel> GetLabels()
         {
+            ReviewLabels();
             return labels;
         }
 
         //Getting All Relative Labels
         public List<FeatureLabel> GetRelativeLabels()
         {
+            ReviewLabels();
             List<FeatureLabel> relative_labels = new List<FeatureLabel>();
 
             foreach (FeatureLabel label in labels)
@@ -132,6 +135,7 @@ namespace AM_Annotator
         //Getting absolute labels in string format
         public List<string> GetAbsoluteString()
         {
+            ReviewLabels();
             List<string> annotations_str = new List<string>();
             foreach(FeatureLabel label in labels)
             {
@@ -143,10 +147,11 @@ namespace AM_Annotator
         //Getting relative labels in string format
         public List<string> GetRelativesString()
         {
+            ReviewLabels();
             List<string> annotation_str = new List<string>();
             foreach (FeatureLabel label in labels)
             {
-                annotation_str.Add(label.Id.ToString() + " " + ((double)label.X / (double)img_width).ToString() + " " + ((double)label.Y / (double)img_height).ToString()
+                annotation_str.Add(label.Id.ToString() + " " + ( (double) label.C_X/ (double)img_width).ToString() + " " + ((double) label.C_Y / (double)img_height).ToString()
                     + " " + ((double)label.Width / (double)img_width).ToString() + " " + ((double)label.Height / (double)img_height));
             }
 
@@ -183,7 +188,35 @@ namespace AM_Annotator
         {
             return img_channel;
         }
-       
+
+        //A private routine to review the annotations
+        private void ReviewLabels()
+        {
+            if (labels.Count == 0)
+            {
+                return;
+            }
+            foreach (FeatureLabel fl in labels)
+            {
+                //1. making sure that the start of annotation is within the image
+                fl.X = Math.Max(fl.X, 0);
+                fl.Y = Math.Max(fl.Y, 0);
+
+                //2. the width and height of the annotation has to be within the image boundaries
+                fl.Width = Math.Min(fl.Width, img_width - fl.X);
+                fl.Height = Math.Min(fl.Height, img_height - fl.Y);
+
+                //3. re-calculate the end X and end Y just to be safe
+                fl.End_X = fl.X + fl.Width;
+                fl.End_Y = fl.Y + fl.Height;
+                //Error Conditions
+                if (fl.X + fl.Width > img_width || fl.Y + fl.Height > img_height || fl.X < 0 || fl.Y < 0 || fl.Width == 0 || fl.Height == 0)
+                {
+                    int i = 0;
+                }
+               
+            }
+        }
         
     }
 }

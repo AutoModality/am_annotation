@@ -847,6 +847,7 @@ namespace AM_Annotator
             if (Properties.Settings.Default.ProjectLocation == "")
             {
                 MessageBox.Show("Please set the annotation folder in Edit -> Preferences.", "Unable to Build",  MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
             Form buildForm = new BuildForm(annotation_imgs, BUILD_LEVEL.BUILD_ALL);
             buildForm.ShowDialog();

@@ -29,32 +29,32 @@
         private void InitializeComponent()
         {
             this.buildingProgressBar = new System.Windows.Forms.ProgressBar();
-            this.label1 = new System.Windows.Forms.Label();
+            this.terminal = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // buildingProgressBar
             // 
-            this.buildingProgressBar.Location = new System.Drawing.Point(15, 48);
+            this.buildingProgressBar.Location = new System.Drawing.Point(12, 12);
             this.buildingProgressBar.Name = "buildingProgressBar";
-            this.buildingProgressBar.Size = new System.Drawing.Size(560, 42);
+            this.buildingProgressBar.Size = new System.Drawing.Size(567, 42);
             this.buildingProgressBar.Step = 1;
             this.buildingProgressBar.TabIndex = 1;
             // 
-            // label1
+            // terminal
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 18);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(53, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Building...";
+            this.terminal.Location = new System.Drawing.Point(13, 61);
+            this.terminal.Multiline = true;
+            this.terminal.Name = "terminal";
+            this.terminal.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.terminal.Size = new System.Drawing.Size(566, 166);
+            this.terminal.TabIndex = 2;
             // 
             // BuildForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(587, 118);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(591, 239);
+            this.Controls.Add(this.terminal);
             this.Controls.Add(this.buildingProgressBar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "BuildForm";
@@ -68,6 +68,6 @@
         #endregion
 
         private System.Windows.Forms.ProgressBar buildingProgressBar;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox terminal;
     }
 }
