@@ -41,6 +41,7 @@
             this.projectToolBarBTN = new System.Windows.Forms.ToolStripDropDownButton();
             this.annotatorProjectBTN = new System.Windows.Forms.ToolStripMenuItem();
             this.dataCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.projectOrganizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripDropDownButton4 = new System.Windows.Forms.ToolStripDropDownButton();
             this.buildAllBTN = new System.Windows.Forms.ToolStripMenuItem();
             this.buildBTN = new System.Windows.Forms.ToolStripMenuItem();
@@ -79,7 +80,6 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.loadImageProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.assistantMethodCB = new System.Windows.Forms.ComboBox();
-            this.projectOrganizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -187,15 +187,22 @@
             // annotatorProjectBTN
             // 
             this.annotatorProjectBTN.Name = "annotatorProjectBTN";
-            this.annotatorProjectBTN.Size = new System.Drawing.Size(180, 22);
+            this.annotatorProjectBTN.Size = new System.Drawing.Size(165, 22);
             this.annotatorProjectBTN.Text = "Annotator";
             // 
             // dataCollectionToolStripMenuItem
             // 
             this.dataCollectionToolStripMenuItem.Name = "dataCollectionToolStripMenuItem";
-            this.dataCollectionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.dataCollectionToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.dataCollectionToolStripMenuItem.Text = "Data Collection";
             this.dataCollectionToolStripMenuItem.Click += new System.EventHandler(this.dataCollectionToolStripMenuItem_Click);
+            // 
+            // projectOrganizerToolStripMenuItem
+            // 
+            this.projectOrganizerToolStripMenuItem.Name = "projectOrganizerToolStripMenuItem";
+            this.projectOrganizerToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.projectOrganizerToolStripMenuItem.Text = "Project Organizer";
+            this.projectOrganizerToolStripMenuItem.Click += new System.EventHandler(this.projectOrganizerToolStripMenuItem_Click);
             // 
             // toolStripDropDownButton4
             // 
@@ -212,14 +219,14 @@
             // buildAllBTN
             // 
             this.buildAllBTN.Name = "buildAllBTN";
-            this.buildAllBTN.Size = new System.Drawing.Size(118, 22);
+            this.buildAllBTN.Size = new System.Drawing.Size(180, 22);
             this.buildAllBTN.Text = "Build All";
             this.buildAllBTN.Click += new System.EventHandler(this.buildAllBTN_Click);
             // 
             // buildBTN
             // 
             this.buildBTN.Name = "buildBTN";
-            this.buildBTN.Size = new System.Drawing.Size(118, 22);
+            this.buildBTN.Size = new System.Drawing.Size(180, 22);
             this.buildBTN.Text = "Build";
             this.buildBTN.Click += new System.EventHandler(this.buildBTN_Click);
             // 
@@ -574,19 +581,13 @@
             this.assistantMethodCB.Items.AddRange(new object[] {
             "Select Assistant",
             "Tracker",
-            "Feature Descriptors"});
+            "Feature Descriptors",
+            "Sequence"});
             this.assistantMethodCB.Location = new System.Drawing.Point(958, 530);
             this.assistantMethodCB.Name = "assistantMethodCB";
             this.assistantMethodCB.Size = new System.Drawing.Size(197, 21);
             this.assistantMethodCB.TabIndex = 19;
             this.assistantMethodCB.SelectedIndexChanged += new System.EventHandler(this.assistantMethodCB_SelectedIndexChanged);
-            // 
-            // projectOrganizerToolStripMenuItem
-            // 
-            this.projectOrganizerToolStripMenuItem.Name = "projectOrganizerToolStripMenuItem";
-            this.projectOrganizerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.projectOrganizerToolStripMenuItem.Text = "Project Organizer";
-            this.projectOrganizerToolStripMenuItem.Click += new System.EventHandler(this.projectOrganizerToolStripMenuItem_Click);
             // 
             // mainWindow
             // 

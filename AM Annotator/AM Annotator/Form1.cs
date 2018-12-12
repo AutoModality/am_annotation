@@ -27,6 +27,7 @@ namespace AM_Annotator
         private List<string> supported_img_format = new List<string>{ "jpg", "jpeg", "png", "gif", "tiff", "bmp" };
         private List<AnnotationImage> annotation_imgs = new List<AnnotationImage>();
         private AnnotationImage selected_annotation_img = new AnnotationImage();
+        private Rectangle last_bounding_box = new Rectangle();
         private FeatureLabel current_annotation = new FeatureLabel();
 
         private Point mouse_start_position = new Point();
@@ -50,6 +51,7 @@ namespace AM_Annotator
         private bool multi_annotation_view = false;
         private bool mouseIsDown = false;
         private bool use_tracker = false;
+        private bool simple_sequence = false;
         private bool use_feature_descriptor = false;
 
         private Thread SplashThread;
@@ -284,6 +286,10 @@ namespace AM_Annotator
                         annotation_imgs[selected_annotation_index].AddLabel(tracker_reference_class_id, roi.X, roi.Y, roi.Width, roi.Height);
                     }
                 }
+                if (simple_sequence && annotation_imgs[selected_annotation_index].GetLabels().Count < 1)
+                {
+                    annotation_imgs[selected_annotation_index].AddLabel(tracker_reference_class_id, last_bounding_box.X, last_bounding_box.Y, last_bounding_box.Width, last_bounding_box.Height);
+                }
 
                 /*updating the annotation ListBox*/
                 updateAnnotationLB();
@@ -434,7 +440,7 @@ namespace AM_Annotator
                     csrt_tracker.Init(annotation_imgs[selected_annotation_index].GetMat(), new Rectangle(x, y, width, height));
                     tracker_reference_class_id = labelForm.LabelClass;
 
-
+                    last_bounding_box = new Rectangle(x, y, width, height);
                 }
             }
             catch (Exception ex)
@@ -951,14 +957,22 @@ namespace AM_Annotator
                 case 0:
                     use_tracker = false;
                     use_feature_descriptor = false;
+                    simple_sequence = false;
                     break;
                 case 1:
                     use_tracker = true;
                     use_feature_descriptor = false;
+                    simple_sequence = false;
                     break;
                 case 2:
                     use_tracker = false;
                     use_feature_descriptor = true;
+                    simple_sequence = false;
+                    break;
+                case 3:
+                    use_tracker = false;
+                    use_feature_descriptor = false;
+                    simple_sequence = true;
                     break;
             }
         }

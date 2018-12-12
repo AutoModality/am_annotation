@@ -55,7 +55,7 @@ namespace AM_Annotator
                 {
                     using (System.IO.StreamWriter sw = new System.IO.StreamWriter(potential_file, false))
                     {
-                        string textToWrite = ai.GetImageLocation() + " " + fl.X.ToString() + " " + fl.Y.ToString() + " " + fl.Width.ToString() + " " + fl.Height.ToString();
+                        string textToWrite = ai.GetImageLocation() + " 1 " + fl.X.ToString() + " " + fl.Y.ToString() + " " + fl.Width.ToString() + " " + fl.Height.ToString();
                         sw.WriteLine(textToWrite);
                         sw.Close();
                     }
