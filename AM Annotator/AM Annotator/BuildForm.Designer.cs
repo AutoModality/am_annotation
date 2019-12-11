@@ -39,6 +39,7 @@
             this.buildingProgressBar.Size = new System.Drawing.Size(567, 42);
             this.buildingProgressBar.Step = 1;
             this.buildingProgressBar.TabIndex = 1;
+            this.buildingProgressBar.Click += new System.EventHandler(this.buildingProgressBar_Click);
             // 
             // terminal
             // 

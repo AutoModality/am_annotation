@@ -64,6 +64,10 @@ namespace AM_Annotator
         {
             return img_location;
         }
+        public void SetImageLocation(String img_loc)
+        {
+            img_location = img_loc;
+        }
         public void SetGlobalIndex(int idx)
         {
             global_idx = idx;
@@ -178,6 +182,7 @@ namespace AM_Annotator
         {
             return Path.GetFileName(img_location);
         }
+        
         public string GetStem()
         {
             return Path.GetFileNameWithoutExtension(img_location);
@@ -198,7 +203,7 @@ namespace AM_Annotator
         {
             return global_idx;
         }
-
+        
         //A private routine to review the annotations
         private void ReviewLabels()
         {

@@ -39,7 +39,6 @@ C:\Users\Nanaj\documents\visual studio 2015\Projects\AM Annotator\AM Annotator\o
 C:\Users\Nanaj\Documents\Projects\am_annotation\AM Annotator\AM Annotator\bin\Debug\AM Annotator.exe.config
 C:\Users\Nanaj\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM Annotator.exe
 C:\Users\Nanaj\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM Annotator.pdb
-C:\Users\Nanaj\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM Annotator.csprojResolveAssemblyReference.cache
 C:\Users\Nanaj\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM_Annotator.mainWindow.resources
 C:\Users\Nanaj\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM_Annotator.Properties.Resources.resources
 C:\Users\Nanaj\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM Annotator.csproj.GenerateResource.Cache
@@ -168,3 +167,5 @@ C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\
 C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM Annotator.csproj.CopyComplete
 C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM Annotator.exe
 C:\Users\alireza\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM Annotator.pdb
+C:\Users\Nanaj\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM_Annotator.ProjectOrganizerForm.resources
+C:\Users\Nanaj\Documents\Projects\am_annotation\AM Annotator\AM Annotator\obj\Debug\AM Annotator.csprojResolveAssemblyReference.cache

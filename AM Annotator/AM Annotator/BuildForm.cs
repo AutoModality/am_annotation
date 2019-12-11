@@ -31,6 +31,7 @@ namespace AM_Annotator
         public string PascalOutputLocation { get { return pascal_output_location; } }
 
         private Thread buildingThread;
+        private Thread imageCopyThread;
         private List<AnnotationImage> annotations;
         private BUILD_LEVEL build_level;
         private OpencvAnnotationFormat oaf;
@@ -46,12 +47,18 @@ namespace AM_Annotator
 
             foreach (AnnotationImage ai in annotations)
             {
-                if (ai.GetLabels().Count < 0)
+                if (ai.GetLabels().Count <= 0)
                 {
                     continue;
                 }
                 String destination_path = image_directory + "\\img_" + ai.GetGlobalIndex().ToString() + Path.GetExtension(ai.GetFileName());
-                File.Copy(ai.GetImageLocation(), destination_path);
+                try
+                {
+                    File.Copy(ai.GetImageLocation(), destination_path);
+                }
+                catch (IOException ioe)
+                {
+                }
             }
         }
 
@@ -70,8 +77,8 @@ namespace AM_Annotator
             this.TopMost = true;
 
             ///Organize the images
-            OrganizeImages();
-
+            imageCopyThread = new Thread(new ThreadStart(OrganizeImages));
+            imageCopyThread.Start();
             //Depending on the build level, set the thread
             switch (build_level)
             {
@@ -211,6 +218,9 @@ namespace AM_Annotator
             });
         }
 
-       
+        private void buildingProgressBar_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

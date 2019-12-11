@@ -105,8 +105,8 @@ namespace AM_Annotator
             //auto_save_thread.IsBackground = true;
             //auto_save_thread.Start();
 
-            this.Size = new System.Drawing.Size(1000, 1000);
-
+            this.Size = new System.Drawing.Size(1215, 795);
+            this.FormBorderStyle = FormBorderStyle.Fixed3D;
         }
 
         //AutoSave Thread
@@ -179,8 +179,9 @@ namespace AM_Annotator
                 var files = Directory.GetFiles(directory, "*." + supported_img_format[i], SearchOption.TopDirectoryOnly);
                 foreach (string file in files)
                 {
-                    annotation_imgs.Add(new AnnotationImage(file, global_index_counter));
-                    global_index_counter++;
+                    annotation_imgs.Add(new AnnotationImage(file, -1));
+                    
+                    updateAnnotationCnt();
                 }
                 loadImageProgressBar.Value = (int)(i * 100.0 / supported_img_format.Count);
                 img_cnt += files.Count();
@@ -425,7 +426,7 @@ namespace AM_Annotator
                 var height = Math.Abs(mouse_current_position.Y - mouse_start_position.Y);
                 //FeatureLabel fl = new FeatureLabel();
 
-                if (autoClassCB.Enabled)
+                if (autoClassCB.Checked)
                 {
                     annotation_imgs[selected_annotation_index].AddLabel((int)autoClassNUD.Value, x, y, width, height);
 
@@ -464,6 +465,12 @@ namespace AM_Annotator
 
                         last_bounding_box = new Rectangle(x, y, width, height);
                     }
+                }
+                if (annotation_imgs[selected_annotation_index].GetGlobalIndex() == -1)
+                {
+                    annotation_imgs[selected_annotation_index].SetGlobalIndex(global_index_counter);
+                    global_index_counter++;
+                    updateAnnotationCnt();
                 }
                 
             }
@@ -523,6 +530,7 @@ namespace AM_Annotator
                     annotation_imgs[selected_annotation_index].GetLabelAt(selected_label_index).Y, 
                     annotation_imgs[selected_annotation_index].GetLabelAt(selected_label_index).Width, 
                     annotation_imgs[selected_annotation_index].GetLabelAt(selected_label_index).Height);
+
 
                 Graphics g = e.Graphics;
                 Pen pen = new Pen(Color.Red, 2);
@@ -611,7 +619,10 @@ namespace AM_Annotator
                 if (annotation_imgs[selected_annotation_index].GetLabels().Count <= 0)
                 {
                     imageLB.SetSelected(imageLB.SelectedIndex, true);
-                    
+                    annotation_imgs[selected_annotation_index].SetGlobalIndex(0);
+
+
+
                 }
                 
                               
@@ -824,8 +835,8 @@ namespace AM_Annotator
                     }
                     if (reader.Name == "Image")
                     {
-                        ai = new AnnotationImage(reader.GetAttribute("Location"), global_index_counter);
-                        global_index_counter++;
+                        ai = new AnnotationImage(reader.GetAttribute("Location"), -1);
+                        
                         newAnnotationImage = true;
                     }
                     if (reader.Name == "Annotation")
@@ -835,7 +846,10 @@ namespace AM_Annotator
                             Convert.ToInt32(reader.GetAttribute("Height")));
                         var s1 = ai.GetFileName();
                         var s2 = ai.GetParentFolder();
-                        
+
+                        ai.SetGlobalIndex(global_index_counter);
+                        global_index_counter++;
+
                     }
                     if (newAnnotationImage)
                     {
@@ -846,8 +860,12 @@ namespace AM_Annotator
             }
 
             updateFolderListBox();
+            updateAnnotationCnt();
         }
-
+        private void updateAnnotationCnt()
+        {
+            statusLabelTSSL.Text = this.Size.Width.ToString() + "X" + this.Size.Height.ToString() + " - Total Annotation: " + global_index_counter.ToString();
+        }
         /***********************************************Unsaved Alret Routine************************************************/
         private void AlertUnsavedProject(bool clearFlag)
         {
@@ -1044,6 +1062,8 @@ namespace AM_Annotator
         private void mainWindow_Resize(object sender, EventArgs e)
         {
             statusLabelTSSL.Text = this.Size.Width.ToString() + "X" + this.Size.Height.ToString();
+            updateAnnotationCnt();
         }
+
     }
 }

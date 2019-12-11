@@ -11,6 +11,7 @@ namespace AM_Annotator
     class PascalVOCAnnotationFormat
     {
         private string output_directory_raw;
+        private string output_directory_;
         private List<AnnotationImage> annotation_images = new List<AnnotationImage>();
         private string alias_directory = "";
         public PascalVOCAnnotationFormat()
@@ -19,6 +20,7 @@ namespace AM_Annotator
 
         public PascalVOCAnnotationFormat(string output_directory, string alias_dir = "")
         {
+            output_directory_ = output_directory;
             output_directory_raw = output_directory + "\\pascalvoc_annoations";
             alias_directory = alias_dir;
             Directory.CreateDirectory(output_directory_raw);
@@ -74,11 +76,11 @@ namespace AM_Annotator
             }
 
             annotation_images.Add(ai);
-            
+
             //Set the path to the file
             //string folder_path = output_directory_raw + "\\" + ai.GetParentFolder();
             //Directory.CreateDirectory(folder_path);
-
+            ai.SetImageLocation(output_directory_ + "\\images\\img_"+ ai.GetGlobalIndex().ToString() + Path.GetExtension(ai.GetFileName()).ToString());
             string annotation_path = output_directory_raw + "\\img_" + ai.GetGlobalIndex().ToString() + ".xml";
 
             //Setting up the xml writer setting
