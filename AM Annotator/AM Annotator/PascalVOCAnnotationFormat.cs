@@ -76,10 +76,10 @@ namespace AM_Annotator
             annotation_images.Add(ai);
             
             //Set the path to the file
-            string folder_path = output_directory_raw + "\\" + ai.GetParentFolder();
-            Directory.CreateDirectory(folder_path);
+            //string folder_path = output_directory_raw + "\\" + ai.GetParentFolder();
+            //Directory.CreateDirectory(folder_path);
 
-            string annotation_path = folder_path + "\\" + Path.GetFileNameWithoutExtension(ai.GetFileName()) + ".xml";
+            string annotation_path = output_directory_raw + "\\img_" + ai.GetGlobalIndex().ToString() + ".xml";
 
             //Setting up the xml writer setting
             XmlWriterSettings xws = new XmlWriterSettings();

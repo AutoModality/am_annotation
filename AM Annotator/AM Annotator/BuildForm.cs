@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
+using System.IO;
 
 namespace AM_Annotator
 {
@@ -36,6 +37,24 @@ namespace AM_Annotator
         private DarknetAnnotationFormat daf;
         private PascalVOCAnnotationFormat paf;
 
+        //This method, copies the training images to a unique directory and renamed them with the global index
+        private void OrganizeImages()
+        {
+            //create the Image directory in the output directory
+            String image_directory = Properties.Settings.Default.ProjectLocation + "\\images";
+            Directory.CreateDirectory(image_directory);
+
+            foreach (AnnotationImage ai in annotations)
+            {
+                if (ai.GetLabels().Count < 0)
+                {
+                    continue;
+                }
+                String destination_path = image_directory + "\\img_" + ai.GetGlobalIndex().ToString() + Path.GetExtension(ai.GetFileName());
+                File.Copy(ai.GetImageLocation(), destination_path);
+            }
+        }
+
         public BuildForm(List<AnnotationImage> ai, BUILD_LEVEL build_lvl)
         {
             InitializeComponent();
@@ -49,6 +68,9 @@ namespace AM_Annotator
         {
             this.BringToFront();
             this.TopMost = true;
+
+            ///Organize the images
+            OrganizeImages();
 
             //Depending on the build level, set the thread
             switch (build_level)

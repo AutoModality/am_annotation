@@ -44,6 +44,7 @@ namespace AM_Annotator
         private int selected_label_index = -1;
         private int annotation_font_size = 12;
         private int tracker_reference_class_id = 0;
+        private int global_index_counter = 0;
 
 
 
@@ -103,6 +104,8 @@ namespace AM_Annotator
             //auto_save_thread = new Thread(AutoSave);
             //auto_save_thread.IsBackground = true;
             //auto_save_thread.Start();
+
+            this.Size = new System.Drawing.Size(1000, 1000);
 
         }
 
@@ -176,7 +179,8 @@ namespace AM_Annotator
                 var files = Directory.GetFiles(directory, "*." + supported_img_format[i], SearchOption.TopDirectoryOnly);
                 foreach (string file in files)
                 {
-                    annotation_imgs.Add(new AnnotationImage(file));
+                    annotation_imgs.Add(new AnnotationImage(file, global_index_counter));
+                    global_index_counter++;
                 }
                 loadImageProgressBar.Value = (int)(i * 100.0 / supported_img_format.Count);
                 img_cnt += files.Count();
@@ -421,14 +425,9 @@ namespace AM_Annotator
                 var height = Math.Abs(mouse_current_position.Y - mouse_start_position.Y);
                 //FeatureLabel fl = new FeatureLabel();
 
-                //Load the id window
-                Form labelWindow = new labelForm();
-                labelWindow.StartPosition = FormStartPosition.Manual;
-                labelWindow.Location = new Point(this.Width / 2, this.Height / 2);
-                if (labelWindow.ShowDialog() == DialogResult.OK)
+                if (autoClassCB.Enabled)
                 {
-                    //int a = labelForm.LabelClass;
-                    annotation_imgs[selected_annotation_index].AddLabel(labelForm.LabelClass, x, y, width, height);
+                    annotation_imgs[selected_annotation_index].AddLabel((int)autoClassNUD.Value, x, y, width, height);
 
                     //Update Gui
                     updateAnnotationLB();
@@ -442,6 +441,31 @@ namespace AM_Annotator
 
                     last_bounding_box = new Rectangle(x, y, width, height);
                 }
+                else
+                {
+                    //Load the id window
+                    Form labelWindow = new labelForm();
+                    labelWindow.StartPosition = FormStartPosition.Manual;
+                    labelWindow.Location = new Point(this.Width / 2, this.Height / 2);
+                    if (labelWindow.ShowDialog() == DialogResult.OK)
+                    {
+                        //int a = labelForm.LabelClass;
+                        annotation_imgs[selected_annotation_index].AddLabel(labelForm.LabelClass, x, y, width, height);
+
+                        //Update Gui
+                        updateAnnotationLB();
+                        viewAllAnnotationsBTN.PerformClick();
+                        //currentImgAnnotationsLB.Items.Add(annotation_imgs[selected_annotation_index].ToString());
+                        AlertUnsavedProject(false);
+
+                        csrt_tracker = new Emgu.CV.Tracking.TrackerTLD();
+                        csrt_tracker.Init(annotation_imgs[selected_annotation_index].GetMat(), new Rectangle(x, y, width, height));
+                        tracker_reference_class_id = labelForm.LabelClass;
+
+                        last_bounding_box = new Rectangle(x, y, width, height);
+                    }
+                }
+                
             }
             catch (Exception ex)
             {
@@ -779,7 +803,7 @@ namespace AM_Annotator
         private void LoadConfiguration(string file_location)
         {
             XmlReader reader = XmlReader.Create(file_location);
-
+            global_index_counter = 0;
             reader.MoveToContent();
             AnnotationImage ai = new AnnotationImage();
             bool newAnnotationImage = false;
@@ -800,7 +824,8 @@ namespace AM_Annotator
                     }
                     if (reader.Name == "Image")
                     {
-                        ai = new AnnotationImage(reader.GetAttribute("Location"));
+                        ai = new AnnotationImage(reader.GetAttribute("Location"), global_index_counter);
+                        global_index_counter++;
                         newAnnotationImage = true;
                     }
                     if (reader.Name == "Annotation")
@@ -987,6 +1012,38 @@ namespace AM_Annotator
             t.SetApartmentState(System.Threading.ApartmentState.STA);
             t.Start();
             this.Close();
+        }
+
+        private void autoClassCB_CheckedChanged(object sender, EventArgs e)
+        {
+            if (autoClassCB.Checked)
+            {
+                autoClassNUD.Enabled = true;
+            }
+            else
+            {
+                autoClassNUD.Enabled = false;
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void setOutputDirBTN_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog openDir = new FolderBrowserDialog();
+            if (openDir.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(openDir.SelectedPath))
+            {
+                outputDirTB.Text = openDir.SelectedPath;
+                Properties.Settings.Default.ProjectLocation = openDir.SelectedPath;
+            }
+        }
+
+        private void mainWindow_Resize(object sender, EventArgs e)
+        {
+            statusLabelTSSL.Text = this.Size.Width.ToString() + "X" + this.Size.Height.ToString();
         }
     }
 }

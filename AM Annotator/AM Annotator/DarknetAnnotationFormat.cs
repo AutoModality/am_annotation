@@ -50,11 +50,11 @@ namespace AM_Annotator
                 return;
             }
             //Find the location that this annotation needs to go
-            string annotation_path = darknet_path + "\\" + ai.GetParentFolder();
-            Directory.CreateDirectory(annotation_path);
+            //string annotation_path = darknet_path + "\\" + ai.GetParentFolder();
+            //Directory.CreateDirectory(annotation_path);
 
             //Find the annotation file name and path
-            string annotation_file_location = annotation_path + "\\" + ai.GetStem() + ".txt";
+            string annotation_file_location = darknet_path + "\\img_" + ai.GetGlobalIndex().ToString() + ".txt";
 
             //write each relative label and save it into the txt file
             File.WriteAllLines(annotation_file_location, ai.GetRelativesString().ToArray());

@@ -17,13 +17,14 @@ namespace AM_Annotator
         private int img_width;
         private int img_height;
         private int img_channel;
+        private int global_idx;
         private List<FeatureLabel> labels = new List<FeatureLabel>();
         
         //Constructors
         public AnnotationImage()
         {
         }
-        public AnnotationImage(string file_location)
+        public AnnotationImage(string file_location, int g_idx)
         {
             img_location = file_location;
             try
@@ -32,6 +33,7 @@ namespace AM_Annotator
                 img_width = Image.Width;
                 img_height = Image.Height;
                 img_channel = Image.NumberOfChannels;
+                global_idx = g_idx;
             }
             catch (Exception e)
             {
@@ -61,6 +63,10 @@ namespace AM_Annotator
         public string GetImageLocation()
         {
             return img_location;
+        }
+        public void SetGlobalIndex(int idx)
+        {
+            global_idx = idx;
         }
         public void AddLabel(FeatureLabel fl)
         {
@@ -187,6 +193,10 @@ namespace AM_Annotator
         public int GetNumOfChannels()
         {
             return img_channel;
+        }
+        public int GetGlobalIndex()
+        {
+            return global_idx;
         }
 
         //A private routine to review the annotations
