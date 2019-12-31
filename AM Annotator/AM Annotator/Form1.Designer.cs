@@ -523,7 +523,7 @@
             // 
             this.autoClassNUD.Enabled = false;
             this.autoClassNUD.Location = new System.Drawing.Point(508, 45);
-            this.autoClassNUD.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.autoClassNUD.Margin = new System.Windows.Forms.Padding(2);
             this.autoClassNUD.Name = "autoClassNUD";
             this.autoClassNUD.Size = new System.Drawing.Size(106, 20);
             this.autoClassNUD.TabIndex = 5;
@@ -532,7 +532,7 @@
             // 
             this.autoClassCB.AutoSize = true;
             this.autoClassCB.Location = new System.Drawing.Point(508, 21);
-            this.autoClassCB.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.autoClassCB.Margin = new System.Windows.Forms.Padding(2);
             this.autoClassCB.Name = "autoClassCB";
             this.autoClassCB.Size = new System.Drawing.Size(112, 17);
             this.autoClassCB.TabIndex = 4;
@@ -630,7 +630,7 @@
             // outputDirTB
             // 
             this.outputDirTB.Location = new System.Drawing.Point(12, 694);
-            this.outputDirTB.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.outputDirTB.Margin = new System.Windows.Forms.Padding(2);
             this.outputDirTB.Name = "outputDirTB";
             this.outputDirTB.Size = new System.Drawing.Size(378, 20);
             this.outputDirTB.TabIndex = 20;
@@ -638,7 +638,7 @@
             // setOutputDirBTN
             // 
             this.setOutputDirBTN.Location = new System.Drawing.Point(396, 691);
-            this.setOutputDirBTN.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.setOutputDirBTN.Margin = new System.Windows.Forms.Padding(2);
             this.setOutputDirBTN.Name = "setOutputDirBTN";
             this.setOutputDirBTN.Size = new System.Drawing.Size(110, 21);
             this.setOutputDirBTN.TabIndex = 21;

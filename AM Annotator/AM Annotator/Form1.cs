@@ -274,7 +274,7 @@ namespace AM_Annotator
                 }
                 if (selected_img.Height > mainPB.Height)
                 {
-                    coef = Math.Max(coef, (int)((selected_img.Height / (mainPB.Height * 1.0)) + 1.0));                   
+                    coef = Math.Max(coef, (int)((selected_img.Height / (mainPB.Height * 1.0)) + 1.0));
                 }
 
 
@@ -302,6 +302,9 @@ namespace AM_Annotator
             catch (ArgumentException E)
             {
 
+            }
+            catch (Exception ex)
+            {
             }
            
         }
@@ -814,6 +817,9 @@ namespace AM_Annotator
         private void LoadConfiguration(string file_location)
         {
             XmlReader reader = XmlReader.Create(file_location);
+
+            string parent_directory = Directory.GetParent(file_location).ToString();
+            string folder = "";
             global_index_counter = 0;
             reader.MoveToContent();
             AnnotationImage ai = new AnnotationImage();
@@ -831,11 +837,15 @@ namespace AM_Annotator
                     }
                     if (reader.Name == "Folder")
                     {
-                        folderLB.Items.Add(reader.GetAttribute("Location"));                        
+                        folder = reader.GetAttribute("Location");
+                        folder = parent_directory + "\\" + Path.GetFileName(folder);
+                        folderLB.Items.Add(folder);                        
                     }
                     if (reader.Name == "Image")
                     {
-                        ai = new AnnotationImage(reader.GetAttribute("Location"), -1);
+                        string location = reader.GetAttribute("Location");
+                        location = folder + "\\" + Path.GetFileName(location);
+                        ai = new AnnotationImage(location, -1);
                         
                         newAnnotationImage = true;
                     }

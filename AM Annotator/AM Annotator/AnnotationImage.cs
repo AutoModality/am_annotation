@@ -24,6 +24,7 @@ namespace AM_Annotator
         public AnnotationImage()
         {
         }
+
         public AnnotationImage(string file_location, int g_idx)
         {
             img_location = file_location;

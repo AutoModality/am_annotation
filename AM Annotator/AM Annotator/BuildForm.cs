@@ -32,7 +32,7 @@ namespace AM_Annotator
 
         private Thread buildingThread;
         private Thread imageCopyThread;
-        private List<AnnotationImage> annotations;
+        private List<AnnotationImage> annotations, tmp_annotations;
         private BUILD_LEVEL build_level;
         private OpencvAnnotationFormat oaf;
         private DarknetAnnotationFormat daf;
@@ -62,12 +62,22 @@ namespace AM_Annotator
             }
         }
 
-        public BuildForm(List<AnnotationImage> ai, BUILD_LEVEL build_lvl)
+        public BuildForm(List<AnnotationImage> ais, BUILD_LEVEL build_lvl)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.Manual;
             this.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2);
-            annotations = ai;
+            annotations = new List<AnnotationImage>();
+            tmp_annotations = new List<AnnotationImage>();
+
+            int idx = 0;
+            foreach (AnnotationImage ai in ais)
+            {
+                AnnotationImage tmp = ai;
+                annotations.Insert(idx,tmp);
+                tmp_annotations.Insert(idx, tmp);
+                idx++;
+            }
             build_level = build_lvl;
 
         }
