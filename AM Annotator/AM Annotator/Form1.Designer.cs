@@ -85,6 +85,10 @@
             this.assistantMethodCB = new System.Windows.Forms.ComboBox();
             this.outputDirTB = new System.Windows.Forms.TextBox();
             this.setOutputDirBTN = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.classDGV = new System.Windows.Forms.DataGridView();
+            this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Alias = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -94,6 +98,8 @@
             this.groupBox6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.autoClassNUD)).BeginInit();
             this.statusStrip1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.classDGV)).BeginInit();
             this.SuspendLayout();
             // 
             // toolStripDropDownButton1
@@ -595,7 +601,7 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadImageProgressBar,
             this.statusLabelTSSL});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 734);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 748);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(1172, 22);
             this.statusStrip1.TabIndex = 18;
@@ -629,7 +635,7 @@
             // 
             // outputDirTB
             // 
-            this.outputDirTB.Location = new System.Drawing.Point(12, 694);
+            this.outputDirTB.Location = new System.Drawing.Point(12, 717);
             this.outputDirTB.Margin = new System.Windows.Forms.Padding(2);
             this.outputDirTB.Name = "outputDirTB";
             this.outputDirTB.Size = new System.Drawing.Size(378, 20);
@@ -637,7 +643,7 @@
             // 
             // setOutputDirBTN
             // 
-            this.setOutputDirBTN.Location = new System.Drawing.Point(396, 691);
+            this.setOutputDirBTN.Location = new System.Drawing.Point(396, 714);
             this.setOutputDirBTN.Margin = new System.Windows.Forms.Padding(2);
             this.setOutputDirBTN.Name = "setOutputDirBTN";
             this.setOutputDirBTN.Size = new System.Drawing.Size(110, 21);
@@ -646,11 +652,44 @@
             this.setOutputDirBTN.UseVisualStyleBackColor = true;
             this.setOutputDirBTN.Click += new System.EventHandler(this.setOutputDirBTN_Click);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.classDGV);
+            this.groupBox1.Location = new System.Drawing.Point(242, 590);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(263, 119);
+            this.groupBox1.TabIndex = 22;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Classes";
+            // 
+            // classDGV
+            // 
+            this.classDGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.classDGV.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Id,
+            this.Alias});
+            this.classDGV.Location = new System.Drawing.Point(7, 14);
+            this.classDGV.Name = "classDGV";
+            this.classDGV.Size = new System.Drawing.Size(240, 99);
+            this.classDGV.TabIndex = 0;
+            this.classDGV.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.classDGV_CellContentClick);
+            // 
+            // Id
+            // 
+            this.Id.HeaderText = "Id";
+            this.Id.Name = "Id";
+            // 
+            // Alias
+            // 
+            this.Alias.HeaderText = "Alias";
+            this.Alias.Name = "Alias";
+            // 
             // mainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1172, 756);
+            this.ClientSize = new System.Drawing.Size(1172, 770);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.setOutputDirBTN);
             this.Controls.Add(this.outputDirTB);
             this.Controls.Add(this.assistantMethodCB);
@@ -685,6 +724,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.autoClassNUD)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.classDGV)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -748,6 +789,10 @@
         private System.Windows.Forms.TextBox outputDirTB;
         private System.Windows.Forms.Button setOutputDirBTN;
         private System.Windows.Forms.ToolStripStatusLabel statusLabelTSSL;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.DataGridView classDGV;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Id;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Alias;
     }
 }
 

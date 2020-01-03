@@ -714,8 +714,43 @@ namespace AM_Annotator
 
 
         }
+
+        private Dictionary<int, string> getClasses()
+        {
+            Dictionary<int, string> classes = new Dictionary<int,string>();
+            //Iterate through the Data Grid View rows
+            foreach (DataGridViewRow row in classDGV.Rows)
+            {
+                int id = 0;
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    if (cell.Value == null)
+                    {
+                        continue;
+                    }
+
+                    //Cell 0 is Id
+                    if (cell.ColumnIndex == 0)
+                    {
+                        id = Convert.ToInt32(cell.Value);
+
+                    }
+                    //Cell 1 is Alias
+                    else if (cell.ColumnIndex == 1)
+                    {
+                        classes.Add(id, cell.Value.ToString());
+
+                    }
+                }
+            }
+            return classes;
+        }
+
         private void SaveConfiguration(string file_location)
         {
+            //Get Class pair (id, Alias)
+            Dictionary<int, string> class_maps = getClasses();
+
             //Setting up XMLWriter Object
             XmlWriterSettings writer_settings = new XmlWriterSettings();
             writer_settings.NewLineHandling = NewLineHandling.Replace;
@@ -745,6 +780,18 @@ namespace AM_Annotator
 
                 writer.WriteEndElement();
 
+
+                //Writing the Class Setting
+                writer.WriteStartElement("Classes");
+                foreach (KeyValuePair<int, String> row in class_maps)
+                {
+                    writer.WriteStartElement("Class");
+                    writer.WriteAttributeString("Id", row.Key.ToString());
+                    writer.WriteAttributeString("Alias", row.Value.ToString());
+                    writer.WriteEndElement();
+                }
+                writer.WriteEndElement();
+
                 //Writing The folder name
                 foreach (string folder in folderLB.Items)
                 {
@@ -765,7 +812,8 @@ namespace AM_Annotator
                         {
                             writer.WriteStartElement("Annotation");
 
-                            writer.WriteAttributeString("Id", label.Id.ToString());
+                            //writer.WriteAttributeString("Id", label.Id.ToString());
+                            writer.WriteAttributeString("Id", class_maps[label.Id]);
 
                             writer.WriteAttributeString("X", label.X.ToString());
 
@@ -795,10 +843,6 @@ namespace AM_Annotator
             catch (Exception ex)
             {
             }
-            
-
-            
-
             AlertUnsavedProject(true);
         }
         /************************************Saving The Entire Workspace when newProjectToolStripMenuItem is clicked***********************************/
@@ -814,16 +858,37 @@ namespace AM_Annotator
                 LoadConfiguration(open_window.FileName);
             }
         }
+
+        private string getPath(string parent_directory, string folder)
+        {
+            string result = "";
+            string shared_folder = Path.GetFileName(parent_directory);
+            int idx = folder.IndexOf(shared_folder);
+            if (idx != -1)
+            {
+                string code = folder.Substring(idx + shared_folder.Length);
+                result = parent_directory + code;
+            }
+
+            return result;
+
+        }
+
         private void LoadConfiguration(string file_location)
         {
-            XmlReader reader = XmlReader.Create(file_location);
+            //Clear All rows
+            classDGV.Rows.Clear();
+            classDGV.Refresh();
 
+            XmlReader reader = XmlReader.Create(file_location);
+                       
             string parent_directory = Directory.GetParent(file_location).ToString();
             string folder = "";
             global_index_counter = 0;
             reader.MoveToContent();
             AnnotationImage ai = new AnnotationImage();
             bool newAnnotationImage = false;
+            Dictionary<int, string> map_classes = new Dictionary<int, string>();
             while (reader.Read())
             {
 
@@ -835,10 +900,17 @@ namespace AM_Annotator
                         Properties.Settings.Default.DarknetAnnotation = Convert.ToBoolean(reader.GetAttribute("Darknet"));
                         Properties.Settings.Default.PascalVOCAnnotation = Convert.ToBoolean(reader.GetAttribute("Pascal"));
                     }
+                    if (reader.Name == "Class")
+                    {
+                        int id = Convert.ToInt32(reader.GetAttribute("Id"));
+                        string alias = reader.GetAttribute("Alias").ToString();
+                        map_classes.Add(id, alias);
+                        classDGV.Rows.Add(id, alias);
+                    }
                     if (reader.Name == "Folder")
                     {
                         folder = reader.GetAttribute("Location");
-                        folder = parent_directory + "\\" + Path.GetFileName(folder);
+                        folder = getPath(parent_directory, folder);
                         folderLB.Items.Add(folder);                        
                     }
                     if (reader.Name == "Image")
@@ -851,7 +923,7 @@ namespace AM_Annotator
                     }
                     if (reader.Name == "Annotation")
                     {
-                        ai.AddLabel(Convert.ToInt32(reader.GetAttribute("Id")), Convert.ToInt32(reader.GetAttribute("X")),
+                        ai.AddLabel(map_classes.FirstOrDefault(x => x.Value == reader.GetAttribute("Id").ToString()).Key/*Convert.ToInt32(reader.GetAttribute("Id"))*/, Convert.ToInt32(reader.GetAttribute("X")),
                             Convert.ToInt32(reader.GetAttribute("Y")), Convert.ToInt32(reader.GetAttribute("Width")),
                             Convert.ToInt32(reader.GetAttribute("Height")));
                         var s1 = ai.GetFileName();
@@ -1075,5 +1147,9 @@ namespace AM_Annotator
             updateAnnotationCnt();
         }
 
+        private void classDGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }
