@@ -17,7 +17,13 @@
             {
                 components.Dispose();
             }
-            base.Dispose(disposing);
+            try
+            {
+                base.Dispose(disposing);
+            }
+            catch (System.Threading.ThreadAbortException tae)
+            { 
+            }
         }
 
         #region Windows Form Designer generated code

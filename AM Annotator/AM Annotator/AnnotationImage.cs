@@ -30,18 +30,37 @@ namespace AM_Annotator
             img_location = file_location;
             try
             {
-                var Image = CvInvoke.Imread(img_location);
+                Emgu.CV.Mat Image = new Emgu.CV.Mat(); 
+                Image = CvInvoke.Imread(img_location);
                 img_width = Image.Width;
                 img_height = Image.Height;
                 img_channel = Image.NumberOfChannels;
                 global_idx = g_idx;
+                Image.Dispose();
             }
             catch (Exception e)
             {
                 ErrorInReading = true;
             }
         }
-        
+
+        private Size getImageSize()
+        {
+            Size result = new Size();
+            try
+            {
+                Emgu.CV.Mat Image = CvInvoke.Imread(img_location);
+                result.Width = Image.Width;
+                result.Height = Image.Height;
+                Image.Dispose();
+            }
+            catch (Exception e)
+            {
+                ErrorInReading = true;
+            }
+
+            return result;
+        }
 
         public bool IsValid()
         {
@@ -50,7 +69,9 @@ namespace AM_Annotator
         public bool IsEmpty()
         {
             var Image = CvInvoke.Imread(img_location);
-            return Image.IsEmpty;
+            bool result = Image.IsEmpty;
+            Image.Dispose();
+            return result;
         }
         public Mat GetMat()
         {
@@ -86,12 +107,23 @@ namespace AM_Annotator
             }
             
         }
-        public void AddLabel(int id, int x, int y, int width, int height)
+        public void AddLabel(int id, int x, int y, int width, int height, int image_width = 0, int image_height = 0)
         {
             if (x < 0) x = 0;
             if (y < 0) y = 0;
             if (width < 0) width = 0;
             if (height < 0) height = 0;
+
+            if (image_width != 0) img_width = image_width;
+            if (image_height != 0) img_height = image_height;
+
+            
+            if (img_width == 0 || img_height == 0)
+            {
+                Size result = getImageSize();
+                img_width = result.Width;
+                img_height = result.Height;
+            }
 
             if (x + width > img_width) width = img_width - x;
             if (y + height > img_width) height = img_height - y;

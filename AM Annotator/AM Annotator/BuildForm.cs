@@ -37,6 +37,7 @@ namespace AM_Annotator
         private OpencvAnnotationFormat oaf;
         private DarknetAnnotationFormat daf;
         private PascalVOCAnnotationFormat paf;
+        private Dictionary<int, string> class_names;
 
         //This method, copies the training images to a unique directory and renamed them with the global index
         private void OrganizeImages()
@@ -62,9 +63,10 @@ namespace AM_Annotator
             }
         }
 
-        public BuildForm(List<AnnotationImage> ais, BUILD_LEVEL build_lvl)
+        public BuildForm(List<AnnotationImage> ais, Dictionary<int, string> class_names, BUILD_LEVEL build_lvl)
         {
             InitializeComponent();
+            this.class_names = class_names;
             this.StartPosition = FormStartPosition.Manual;
             this.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2);
             annotations = new List<AnnotationImage>();
@@ -144,7 +146,7 @@ namespace AM_Annotator
         /// </summary>
         private void BuildVOC()
         {
-            paf = new PascalVOCAnnotationFormat(Properties.Settings.Default.ProjectLocation);
+            paf = new PascalVOCAnnotationFormat(Properties.Settings.Default.ProjectLocation, this.class_names);
             for (int i = 0; i < annotations.Count; i++)
             {
                 paf.Add(annotations[i]);
@@ -159,7 +161,7 @@ namespace AM_Annotator
         {
             oaf = new OpencvAnnotationFormat(Properties.Settings.Default.ProjectLocation);
             daf = new DarknetAnnotationFormat(Properties.Settings.Default.ProjectLocation);
-            paf = new PascalVOCAnnotationFormat(Properties.Settings.Default.ProjectLocation);
+            paf = new PascalVOCAnnotationFormat(Properties.Settings.Default.ProjectLocation, this.class_names);
             PrintInTerminal("Start Building All...");
             for (int i = 0; i < annotations.Count; i++)
             {

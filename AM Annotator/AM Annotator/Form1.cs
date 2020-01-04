@@ -255,6 +255,9 @@ namespace AM_Annotator
          */
         private void imageLB_SelectedIndexChanged(object sender, EventArgs e)
         {
+            ClearMemory();
+            if (selected_img != null) selected_img.Dispose();
+            if(mainPB.Image != null) mainPB.Image.Dispose();
             try
             {
                 //Form the string related to image location
@@ -278,9 +281,12 @@ namespace AM_Annotator
                 }
 
 
-                CvInvoke.Resize(selected_img, selected_img, new Size(selected_img.Width / coef, selected_img.Height / coef));
-                Image<Bgr, Byte> my_image = selected_img.ToImage<Bgr, byte>();
-                mainPB.Image = my_image.ToBitmap();
+                if (coef != 1)
+                {
+                    CvInvoke.Resize(selected_img, selected_img, new Size(selected_img.Width / coef, selected_img.Height / coef));
+                } 
+                //mainPB.Image.Dispose();
+                mainPB.Image = selected_img.ToImage<Bgr, byte>().ToBitmap();
 
                 if (use_tracker && annotation_imgs[selected_annotation_index].GetLabels().Count <= 1)
                 {
@@ -296,7 +302,7 @@ namespace AM_Annotator
                     annotation_imgs[selected_annotation_index].AddLabel(tracker_reference_class_id, last_bounding_box.X, last_bounding_box.Y, last_bounding_box.Width, last_bounding_box.Height);
                 }
 
-                /*updating the annotation ListBox*/
+                //updating the annotation ListBox
                 updateAnnotationLB();
             }
             catch (ArgumentException E)
@@ -427,11 +433,12 @@ namespace AM_Annotator
                 var y = Math.Min(mouse_current_position.Y, mouse_start_position.Y);
                 var width = Math.Abs(mouse_current_position.X - mouse_start_position.X);
                 var height = Math.Abs(mouse_current_position.Y - mouse_start_position.Y);
+
                 //FeatureLabel fl = new FeatureLabel();
 
                 if (autoClassCB.Checked)
                 {
-                    annotation_imgs[selected_annotation_index].AddLabel((int)autoClassNUD.Value, x, y, width, height);
+                    annotation_imgs[selected_annotation_index].AddLabel((int)autoClassNUD.Value, x, y, width, height, mainPB.Image.Width, mainPB.Image.Height);
 
                     //Update Gui
                     updateAnnotationLB();
@@ -454,7 +461,7 @@ namespace AM_Annotator
                     if (labelWindow.ShowDialog() == DialogResult.OK)
                     {
                         //int a = labelForm.LabelClass;
-                        annotation_imgs[selected_annotation_index].AddLabel(labelForm.LabelClass, x, y, width, height);
+                        annotation_imgs[selected_annotation_index].AddLabel(labelForm.LabelClass, x, y, width, height, mainPB.Image.Width, mainPB.Image.Height);
 
                         //Update Gui
                         updateAnnotationLB();
@@ -498,11 +505,7 @@ namespace AM_Annotator
                 var y = Math.Min(mouse_current_position.Y, mouse_start_position.Y);
                 var width = Math.Abs(mouse_current_position.X - mouse_start_position.X);
                 var height = Math.Abs(mouse_current_position.Y - mouse_start_position.Y);
-                /*Rectangle rect = new Rectangle(
-                    Math.Min(mouse_current_position.X, mouse_start_position.X),
-                    Math.Min(mouse_current_position.Y, mouse_start_position.Y),
-                    Math.Abs(mouse_current_position.X - mouse_start_position.X),
-                    Math.Abs(mouse_current_position.Y - mouse_start_position.Y));*/
+         
                 Rectangle rect = new Rectangle(x, y, width, height);
 
                 Graphics g = e.Graphics;
@@ -526,6 +529,7 @@ namespace AM_Annotator
 
 
                 pen.Dispose();
+
             }
             else if (annotation_selected)
             {
@@ -570,7 +574,7 @@ namespace AM_Annotator
                 }
                        
                 pen.Dispose();
-
+                //g.Dispose();
                 multi_annotation_view = false;
             }
         }
@@ -839,11 +843,14 @@ namespace AM_Annotator
 
                 //writer.Flush();
                 writer.Close();
+                MessageBox.Show("Save", "Save is done :)");
             }
             catch (Exception ex)
             {
             }
             AlertUnsavedProject(true);
+
+
         }
         /************************************Saving The Entire Workspace when newProjectToolStripMenuItem is clicked***********************************/
         private void newProjectToolStripMenuItem_Click(object sender, EventArgs e)
@@ -980,7 +987,8 @@ namespace AM_Annotator
                 MessageBox.Show("Please set the annotation folder in Edit -> Preferences.", "Unable to Build",  MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            Form buildForm = new BuildForm(annotation_imgs, BUILD_LEVEL.BUILD_ALL);
+            var class_names = getClasses();
+            Form buildForm = new BuildForm(annotation_imgs, class_names, BUILD_LEVEL.BUILD_ALL);
             buildForm.ShowDialog();
         }
         /***********************************************Build Button************************************************/
@@ -995,22 +1003,22 @@ namespace AM_Annotator
             bool buildDarknet = Properties.Settings.Default.DarknetAnnotation;
             if (buildPascal && buildOpencv && buildDarknet)
             {
-                Form buildForm = new BuildForm(annotation_imgs, BUILD_LEVEL.BUILD_ALL);
+                Form buildForm = new BuildForm(annotation_imgs, getClasses(), BUILD_LEVEL.BUILD_ALL);
                 buildForm.ShowDialog();
             }
             else if (buildPascal && !buildOpencv && !buildDarknet)
             {
-                Form buildForm = new BuildForm(annotation_imgs, BUILD_LEVEL.BUILD_VOC_ONLY);
+                Form buildForm = new BuildForm(annotation_imgs, getClasses(), BUILD_LEVEL.BUILD_VOC_ONLY);
                 buildForm.ShowDialog();
             }
             else if (!buildPascal && buildOpencv && !buildDarknet)
             {
-                Form buildForm = new BuildForm(annotation_imgs, BUILD_LEVEL.BUILD_OPENCV_ONLY);
+                Form buildForm = new BuildForm(annotation_imgs, getClasses(), BUILD_LEVEL.BUILD_OPENCV_ONLY);
                 buildForm.ShowDialog();
             }
             else if (!buildPascal && !buildOpencv && buildDarknet)
             {
-                Form buildForm = new BuildForm(annotation_imgs, BUILD_LEVEL.BUILD_DARKNET_ONLY);
+                Form buildForm = new BuildForm(annotation_imgs, getClasses(), BUILD_LEVEL.BUILD_DARKNET_ONLY);
                 buildForm.ShowDialog();
             }
         }
@@ -1150,6 +1158,18 @@ namespace AM_Annotator
         private void classDGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void mainPB_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ClearMemory()
+        {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
         }
     }
 }

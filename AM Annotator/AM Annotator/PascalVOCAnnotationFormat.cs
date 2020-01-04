@@ -14,14 +14,16 @@ namespace AM_Annotator
         private string output_directory_;
         private List<AnnotationImage> annotation_images = new List<AnnotationImage>();
         private string alias_directory = "";
+        Dictionary<int, string> class_names_ = new Dictionary<int, string>();
         public PascalVOCAnnotationFormat()
         {
         }
 
-        public PascalVOCAnnotationFormat(string output_directory, string alias_dir = "")
+        public PascalVOCAnnotationFormat(string output_directory, Dictionary<int, string> class_names,string alias_dir = "")
         {
             output_directory_ = output_directory;
-            output_directory_raw = output_directory + "\\pascalvoc_annoations";
+            class_names_ = class_names;
+            output_directory_raw = output_directory + "\\pascalvoc_annotations";
             alias_directory = alias_dir;
             Directory.CreateDirectory(output_directory_raw);
         }
@@ -81,7 +83,9 @@ namespace AM_Annotator
             //string folder_path = output_directory_raw + "\\" + ai.GetParentFolder();
             //Directory.CreateDirectory(folder_path);
             //ai.SetImageLocation(output_directory_ + "\\images\\img_"+ ai.GetGlobalIndex().ToString() + Path.GetExtension(ai.GetFileName()).ToString());
+            string new_image_name = "img_" + ai.GetGlobalIndex().ToString() + Path.GetExtension(ai.GetFileName()).ToString();
             string annotation_path = output_directory_raw + "\\img_" + ai.GetGlobalIndex().ToString() + ".xml";
+            
 
             //Setting up the xml writer setting
             XmlWriterSettings xws = new XmlWriterSettings();
@@ -97,8 +101,9 @@ namespace AM_Annotator
             writer.WriteStartElement("annotation");
 
             writer.WriteElementString("folder", ai.GetParentFolder());
-            writer.WriteElementString("filename", ai.GetFileName());
-            writer.WriteElementString("path", ai.GetImageLocation());
+            //writer.WriteElementString("filename", ai.GetFileName());
+            writer.WriteElementString("filename", new_image_name);
+            //writer.WriteElementString("path", ai.GetImageLocation());
 
             writer.WriteStartElement("source");
             writer.WriteElementString("database", "Unknown");
@@ -115,7 +120,7 @@ namespace AM_Annotator
             writer.WriteStartElement("object");
             foreach (FeatureLabel label in labels)
             {
-                writer.WriteElementString("name", Convert.ToString(label.Id));
+                writer.WriteElementString("name", getClassName(label.Id));
                 writer.WriteElementString("pose", Convert.ToString("Frontal"));
                 writer.WriteElementString("truncated", Convert.ToString(0));
                 writer.WriteElementString("difficult", Convert.ToString(0));
@@ -123,9 +128,13 @@ namespace AM_Annotator
 
                 writer.WriteStartElement("bndbox");
                 writer.WriteElementString("xmin", Convert.ToString(label.X));
-                writer.WriteElementString("xmax", Convert.ToString(label.End_X));
                 writer.WriteElementString("ymin", Convert.ToString(label.Y));
+                writer.WriteElementString("xmax", Convert.ToString(label.End_X));
                 writer.WriteElementString("ymax", Convert.ToString(label.End_Y));
+                writer.WriteElementString("width", Convert.ToString(label.Width));
+                writer.WriteElementString("height", Convert.ToString(label.Height));
+                writer.WriteElementString("xcenter", Convert.ToString(label.X + label.Width/2));
+                writer.WriteElementString("ycenter", Convert.ToString(label.Y + label.Height/2));
                 writer.WriteEndElement();
 
             }
@@ -135,5 +144,12 @@ namespace AM_Annotator
             writer.WriteEndDocument();
             writer.Close();
         }
+
+        private string getClassName(int id)
+        {
+            return class_names_[id];
+        }
+
+
     }
 }
